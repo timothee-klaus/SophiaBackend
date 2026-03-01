@@ -13,13 +13,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Document {
     private Long id;
-    private UUID eleve_id;
-    private TypeDocument type_document;
-    private String nom_fichier;
-    private String chemin_fichier;
-    private LocalDateTime date_upload;
-    private UUID utilisateur_id;
+    private UUID eleveId;
+    private TypeDocument typeDocument;
+    private String nomFichier;
+    private String cheminFichier;
+    private LocalDateTime dateUpload;
+    private UUID utilisateurId;
     private String description;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 }
-

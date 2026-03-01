@@ -13,12 +13,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TranchePaiement {
     private Long id;
-    private Long frais_scolaire_id;
-    private String nom_tranche;
+    private Long fraisScolaireId;
+    private String nomTranche;
     private BigDecimal montant;
-    private LocalDate date_limite_debut;
-    private LocalDate date_limite_fin;
+    private LocalDate dateLimiteDebut;
+    private LocalDate dateLimiteFin;
     private Integer ordre;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 }
-

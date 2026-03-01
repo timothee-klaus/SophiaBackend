@@ -15,16 +15,15 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Paiement {
     private Long id;
-    private Long inscription_id;
-    private TypePaiement type_paiement;
-    private Long reference_id;
+    private Long inscriptionId;
+    private TypePaiement typePaiement;
+    private Long referenceId;
     private BigDecimal montant;
-    private LocalDateTime date_paiement;
-    private ModePaiement mode_paiement;
-    private String recu_path;
+    private LocalDateTime datePaiement;
+    private ModePaiement modePaiement;
+    private String recuPath;
     private String commentaire;
-    private UUID utilisateur_id;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private UUID utilisateurId;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
-

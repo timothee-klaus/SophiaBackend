@@ -18,9 +18,8 @@ public class Etablissement {
     private String telephone;
     private String email;
     private String logo;
-    private LocalDate date_creation;
+    private LocalDate dateCreation;
     private StatutEtablissement statut;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
-

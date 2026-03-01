@@ -1,10 +1,13 @@
 package com.sophia.backend.domain.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sophia.backend.domain.model.enums.ActionLog;
+import com.sophia.backend.domain.enums.ActionLog;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Entité métier représentant un log d'action dans le système.
@@ -13,7 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Log {
-    private long id;
+    private Long id;
+    private UUID utilisateurId;
     private ActionLog action;
     private String entite;
     private String entiteId;
@@ -21,7 +25,6 @@ public class Log {
     private JsonNode nouvellesValeurs;
     private String ipAdresse;
     private String userAgent;
-    private String dateAction;
+    private LocalDateTime dateAction;
     private String description;
-    private long utilisateurId;
 }

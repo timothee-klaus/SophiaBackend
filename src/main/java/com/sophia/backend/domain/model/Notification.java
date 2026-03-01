@@ -14,12 +14,11 @@ import java.util.UUID;
 public class Notification {
     private Long id;
     private TypeNotification type;
-    private UUID expediteur_id;
-    private UUID destinataire_id;
+    private UUID expediteurId;
+    private UUID destinataireId;
     private String contenu;
     private boolean lu;
-    private LocalDateTime date_creation;
+    private LocalDateTime dateCreation;
     private String lien;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 }
-

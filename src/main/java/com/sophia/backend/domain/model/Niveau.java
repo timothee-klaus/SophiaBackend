@@ -12,9 +12,8 @@ import java.time.LocalDateTime;
 public class Niveau {
     private Long id;
     private String nom;
-    private Long cycle_id;
-    private Long etablissement_id;
+    private Long cycleId;
+    private Long etablissementId;
     private Integer ordre;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 }
-

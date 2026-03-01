@@ -13,9 +13,8 @@ import java.time.LocalDateTime;
 public class AnneeScolaire {
     private Long id;
     private String libelle;
-    private LocalDate date_debut;
-    private LocalDate date_fin;
-    private boolean est_active;
-    private LocalDateTime created_at;
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
+    private boolean estActive;
+    private LocalDateTime createdAt;
 }
-

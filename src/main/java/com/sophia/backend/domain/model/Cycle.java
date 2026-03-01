@@ -14,6 +14,5 @@ public class Cycle {
     private String nom;
     private String description;
     private Integer ordre;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 }
-

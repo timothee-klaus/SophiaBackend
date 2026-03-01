@@ -12,8 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class AccesEtablissement {
     private Long id;
-    private UUID utilisateur_id;
-    private Long etablissement_id;
-    private LocalDateTime created_at;
+    private UUID utilisateurId;
+    private Long etablissementId;
+    private LocalDateTime createdAt;
 }
-

@@ -12,11 +12,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class FraisScolaire {
     private Long id;
-    private Long niveau_id;
-    private Long annee_scolaire_id;
-    private BigDecimal montant_total;
+    private Long niveauId;
+    private Long anneeScolaireId;
+    private BigDecimal montantTotal;
     private String description;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
-

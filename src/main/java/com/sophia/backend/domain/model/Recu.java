@@ -13,13 +13,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Recu {
     private Long id;
-    private Long paiement_id;
-    private UUID demande_par;
-    private LocalDateTime date_demande;
-    private UUID traite_par; // qui a traité (Directeur/Secrétaire)
-    private LocalDateTime date_traitement;
+    private Long paiementId;
+    private UUID demandePar;
+    private LocalDateTime dateDemande;
+    private UUID traitePar; // qui a traité (Directeur/Secrétaire)
+    private LocalDateTime dateTraitement;
     private RecuStatut statut;
-    private String chemin_fichier;
-    private LocalDateTime created_at;
+    private String cheminFichier;
+    private LocalDateTime createdAt;
 }
-

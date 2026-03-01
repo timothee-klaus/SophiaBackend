@@ -14,14 +14,13 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Blocage {
     private Long id;
-    private Long inscription_id;
-    private TypeBlocage type_blocage;
+    private Long inscriptionId;
+    private TypeBlocage typeBlocage;
     private String raison;
-    private LocalDate date_debut;
-    private LocalDate date_fin; // null si actif
-    private boolean est_actif;
-    private UUID leve_par;
-    private LocalDateTime date_levee;
-    private LocalDateTime created_at;
+    private LocalDate dateDebut;
+    private LocalDate dateFin; // null si actif
+    private boolean estActif;
+    private UUID levePar;
+    private LocalDateTime dateLevee;
+    private LocalDateTime createdAt;
 }
-

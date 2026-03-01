@@ -14,13 +14,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Inscription {
     private Long id;
-    private UUID eleve_id;
-    private Long niveau_id;
-    private Long annee_scolaire_id;
-    private LocalDate date_inscription;
+    private UUID eleveId;
+    private Long niveauId;
+    private Long anneeScolaireId;
+    private LocalDate dateInscription;
     private StatutInscription statut;
     private String commentaire;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
-

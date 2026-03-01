@@ -12,10 +12,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class FraisDivers {
     private Long id;
-    private Long niveau_id; // null si applicable à tous
+    private Long niveauId; // null si applicable à tous
     private String libelle;
     private BigDecimal montant;
-    private Long annee_scolaire_id;
-    private LocalDateTime created_at;
+    private Long anneeScolaireId;
+    private LocalDateTime createdAt;
 }
-
