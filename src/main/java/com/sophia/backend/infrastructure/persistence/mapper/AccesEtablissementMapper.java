@@ -2,6 +2,7 @@ package com.sophia.backend.infrastructure.persistence.mapper;
 
 import com.sophia.backend.application.dto.AccesEtablissementDTO;
 import com.sophia.backend.domain.model.AccesEtablissement;
+import com.sophia.backend.infrastructure.persistence.entity.AccesEtablissementEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,4 +21,16 @@ public class AccesEtablissementMapper {
         a.setCreatedAt(d.getCreatedAt());
         return a;
     }
+
+    public AccesEtablissement toDomain(AccesEtablissementEntity e) {
+        if (e == null) return null;
+        AccesEtablissement a = new AccesEtablissement();
+        a.setId(e.getId());
+        a.setUtilisateurId(e.getUtilisateurId());
+        a.setEtablissementId(e.getEtablissementId());
+        a.setCreatedAt(e.getCreatedAt());
+        return a;
+    }
 }
+
+

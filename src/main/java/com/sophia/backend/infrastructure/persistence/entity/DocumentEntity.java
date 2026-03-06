@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "document")
+@Table(name = "documents")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

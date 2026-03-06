@@ -39,5 +39,52 @@ public class InscriptionService {
     public void delete(Long id) {
         inscriptionRepository.deleteById(id);
     }
+
+    /**
+     * Enregistrer le dépôt d'un dossier d'inscription
+     */
+    public Inscription enregistrerDossierInscription(Inscription inscription) {
+        inscription.setStatut("ACTIVE");
+        return this.create(inscription);
+    }
+
+    /**
+     * Valider les pièces fournies (check-list basée sur les fiches)
+     */
+    public Inscription validerPiecesInscription(Long inscriptionId) {
+        return inscriptionRepository.findById(inscriptionId).map(inscription -> {
+            inscription.setStatut("VALIDEE");
+            return inscriptionRepository.save(inscription);
+        }).orElseThrow(() -> new IllegalArgumentException("Inscription non trouvée"));
+    }
+
+    /**
+     * Enregistrer le paiement des frais d'inscription
+     */
+    public Inscription enregistrerPaiementInscription(Long inscriptionId) {
+        return inscriptionRepository.findById(inscriptionId).map(inscription -> {
+            inscription.setStatut("PAYEE");
+            return inscriptionRepository.save(inscription);
+        }).orElseThrow(() -> new IllegalArgumentException("Inscription non trouvée"));
+    }
+
+    /**
+     * Obtenir les inscriptions actives pour un élève
+     */
+    public List<Inscription> obtenirInscriptionsActives(UUID eleveId) {
+        return this.findByEleveId(eleveId).stream()
+                .filter(i -> "ACTIVE".equals(i.getStatut()) || "VALIDEE".equals(i.getStatut()))
+                .toList();
+    }
+
+    /**
+     * Marquer une inscription comme terminée
+     */
+    public void terminerInscription(Long inscriptionId) {
+        inscriptionRepository.findById(inscriptionId).ifPresent(inscription -> {
+            inscription.setStatut("TERMINEE");
+            inscriptionRepository.save(inscription);
+        });
+    }
 }
 

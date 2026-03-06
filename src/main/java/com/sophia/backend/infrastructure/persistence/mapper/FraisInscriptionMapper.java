@@ -2,6 +2,7 @@ package com.sophia.backend.infrastructure.persistence.mapper;
 
 import com.sophia.backend.application.dto.FraisInscriptionDTO;
 import com.sophia.backend.domain.model.FraisInscription;
+import com.sophia.backend.infrastructure.persistence.entity.FraisInscriptionEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,4 +23,29 @@ public class FraisInscriptionMapper {
         f.setCreatedAt(d.getCreatedAt());
         return f;
     }
+
+    public FraisInscription toDomain(FraisInscriptionEntity e) {
+        if (e == null) return null;
+        FraisInscription f = new FraisInscription();
+        f.setId(e.getId());
+        f.setCycleId(e.getCycleId());
+        f.setNiveauId(e.getNiveauId());
+        f.setAnneeScolaireId(e.getAnneeScolaireId());
+        f.setMontant(e.getMontant());
+        f.setCreatedAt(e.getCreatedAt());
+        return f;
+    }
+
+    public FraisInscriptionEntity toEntity(FraisInscription f) {
+        if (f == null) return null;
+        FraisInscriptionEntity e = new FraisInscriptionEntity();
+        e.setId(f.getId());
+        e.setCycleId(f.getCycleId());
+        e.setNiveauId(f.getNiveauId());
+        e.setAnneeScolaireId(f.getAnneeScolaireId());
+        e.setMontant(f.getMontant());
+        e.setCreatedAt(f.getCreatedAt());
+        return e;
+    }
 }
+
