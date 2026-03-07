@@ -9,6 +9,7 @@ public interface FraisDiversRepository {
     Optional<FraisDivers> findById(Long id);
     List<FraisDivers> findAll();
     List<FraisDivers> findByNiveauId(Long niveauId);
+    List<FraisDivers> findByAnneeScolaireId(Long anneeScolaireId);
     FraisDivers save(FraisDivers frais);
     void deleteById(Long id);
 }

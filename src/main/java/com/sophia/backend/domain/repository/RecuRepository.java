@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface RecuRepository {
     Optional<Recu> findById(Long id);
+    List<Recu> findAll();
     List<Recu> findByPaiementId(Long paiementId);
     Recu save(Recu recu);
     void deleteById(Long id);

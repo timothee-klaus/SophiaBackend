@@ -48,7 +48,11 @@ public class FraisScolaireRepositoryAdapter implements FraisScolaireRepository {
     public void deleteById(Long id) {
         jpaRepository.deleteById(id);
     }
+
+    @Override
+    public List<FraisScolaire> findByAnneeScolaireId(Long anneeScolaireId) {
+        return jpaRepository.findByAnneeScolaireId(anneeScolaireId).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
 }
-
-
-

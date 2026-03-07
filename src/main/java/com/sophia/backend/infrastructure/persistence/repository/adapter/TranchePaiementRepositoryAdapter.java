@@ -41,5 +41,11 @@ public class TranchePaiementRepositoryAdapter implements TranchePaiementReposito
     public void deleteById(Long id) {
         jpaRepository.deleteById(id);
     }
-}
 
+    @Override
+    public List<TranchePaiement> findAll() {
+        return jpaRepository.findAll().stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+}

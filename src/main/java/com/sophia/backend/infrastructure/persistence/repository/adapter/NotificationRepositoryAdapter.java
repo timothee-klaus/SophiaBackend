@@ -42,5 +42,19 @@ public class NotificationRepositoryAdapter implements NotificationRepository {
     public void deleteById(Long id) {
         jpaRepository.deleteById(id);
     }
+
+    @Override
+    public List<Notification> findAll() {
+        return jpaRepository.findAll().stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Notification> findUnreadByDestinataireId(UUID destinataireId) {
+        return jpaRepository.findByDestinataireIdAndLuFalse(destinataireId).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
 }
 

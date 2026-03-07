@@ -1,6 +1,7 @@
 package com.sophia.backend.application.service;
 import com.sophia.backend.domain.model.Utilisateur;
 import com.sophia.backend.domain.repository.UtilisateurRepository;
+import com.sophia.backend.domain.enums.RoleUtilisateur;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +22,7 @@ public class UtilisateurService {
         return utilisateurRepository.findAll();
     }
     public List<Utilisateur> findByRole(String role) {
-        return utilisateurRepository.findByRole(role);
+        return utilisateurRepository.findByRole(RoleUtilisateur.valueOf(role));
     }
     public Utilisateur create(Utilisateur utilisateur) {
         return utilisateurRepository.save(utilisateur);
@@ -42,3 +43,5 @@ public class UtilisateurService {
         return this.findByRole("DIRECTEUR");
     }
 }
+
+

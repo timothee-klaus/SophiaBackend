@@ -8,7 +8,9 @@ import java.util.UUID;
 
 public interface LogRepository {
     Optional<Log> findById(Long id);
+    List<Log> findAll();
     List<Log> findByUtilisateurId(UUID utilisateurId);
     Log save(Log log);
+    void deleteById(Long id);
 }
 

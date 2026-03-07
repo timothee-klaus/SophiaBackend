@@ -1,6 +1,7 @@
 package com.sophia.backend.application.service;
 import com.sophia.backend.domain.model.Recu;
 import com.sophia.backend.domain.repository.RecuRepository;
+import com.sophia.backend.domain.enums.RecuStatut;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,7 @@ public class RecuService {
         Recu recu = new Recu();
         recu.setPaiementId(paiementId);
         recu.setDemandePar(secretaireId);
-        recu.setStatut("DEMANDE");
+        recu.setStatut(RecuStatut.DEMANDE);
         return this.create(recu);
     }
     public Recu genererRecuPaiement(Long paiementId, UUID secretaireId, String cheminFichier) {
@@ -41,21 +42,21 @@ public class RecuService {
         recu.setPaiementId(paiementId);
         recu.setDemandePar(secretaireId);
         recu.setCheminFichier(cheminFichier);
-        recu.setStatut("DISPONIBLE");
+        recu.setStatut(RecuStatut.DISPONIBLE);
         return this.create(recu);
     }
     public Recu demanderRecuNumerise(Long paiementId, UUID directeurId) {
         Recu recu = new Recu();
         recu.setPaiementId(paiementId);
         recu.setDemandePar(directeurId);
-        recu.setStatut("DEMANDE");
+        recu.setStatut(RecuStatut.DEMANDE);
         return this.create(recu);
     }
     public Recu traiterRecuDemande(Long recuId, UUID secretaireId, String cheminFichier) {
         return recuRepository.findById(recuId).map(recu -> {
             recu.setTraitePar(secretaireId);
             recu.setCheminFichier(cheminFichier);
-            recu.setStatut("DISPONIBLE");
+            recu.setStatut(RecuStatut.DISPONIBLE);
             return recuRepository.save(recu);
         }).orElseThrow(() -> new IllegalArgumentException("Reçu non trouvé"));
     }

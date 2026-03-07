@@ -1,6 +1,7 @@
 package com.sophia.backend.infrastructure.persistence.repository.adapter;
 import com.sophia.backend.domain.model.Utilisateur;
 import com.sophia.backend.domain.repository.UtilisateurRepository;
+import com.sophia.backend.domain.enums.RoleUtilisateur;
 import com.sophia.backend.infrastructure.persistence.entity.UtilisateurEntity;
 import com.sophia.backend.infrastructure.persistence.mapper.UtilisateurEntityMapper;
 import com.sophia.backend.infrastructure.persistence.repository.UtilisateurJpaRepository;
@@ -38,5 +39,12 @@ public class UtilisateurRepositoryAdapter implements UtilisateurRepository {
     @Override
     public void deleteById(UUID id) {
         jpaRepository.findByUuid(id).ifPresent(u -> jpaRepository.deleteById(u.getId()));
+    }
+
+    @Override
+    public List<Utilisateur> findByRole(RoleUtilisateur role) {
+        return jpaRepository.findByRole(role.toString()).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
     }
 }

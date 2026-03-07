@@ -1,6 +1,7 @@
 package com.sophia.backend.application.service;
 import com.sophia.backend.domain.model.Log;
 import com.sophia.backend.domain.repository.LogRepository;
+import com.sophia.backend.domain.enums.ActionLog;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class LogService {
     public void enregistrerCreation(UUID utilisateurId, String entite, String entiteId, String description) {
         Log log = new Log();
         log.setUtilisateurId(utilisateurId);
-        log.setAction("CREATE");
+        log.setAction(ActionLog.CREATE);
         log.setEntite(entite);
         log.setEntiteId(entiteId);
         log.setDescription(description);
@@ -39,18 +40,16 @@ public class LogService {
                                        String anciennes_valeurs, String nouvelles_valeurs, String description) {
         Log log = new Log();
         log.setUtilisateurId(utilisateurId);
-        log.setAction("UPDATE");
+        log.setAction(ActionLog.UPDATE);
         log.setEntite(entite);
         log.setEntiteId(entiteId);
-        log.setAnciennes_valeurs(anciennes_valeurs);
-        log.setNouvelles_valeurs(nouvelles_valeurs);
         log.setDescription(description);
         this.create(log);
     }
     public void enregistrerSuppression(UUID utilisateurId, String entite, String entiteId, String description) {
         Log log = new Log();
         log.setUtilisateurId(utilisateurId);
-        log.setAction("DELETE");
+        log.setAction(ActionLog.DELETE);
         log.setEntite(entite);
         log.setEntiteId(entiteId);
         log.setDescription(description);
@@ -59,7 +58,7 @@ public class LogService {
     public void enregistrerConnexion(UUID utilisateurId, String adresseIp, String userAgent) {
         Log log = new Log();
         log.setUtilisateurId(utilisateurId);
-        log.setAction("LOGIN");
+        log.setAction(ActionLog.LOGIN);
         log.setDescription("Connexion utilisateur");
         log.setIpAdresse(adresseIp);
         log.setUserAgent(userAgent);
@@ -68,7 +67,7 @@ public class LogService {
     public void enregistrerDeconnexion(UUID utilisateurId) {
         Log log = new Log();
         log.setUtilisateurId(utilisateurId);
-        log.setAction("LOGOUT");
+        log.setAction(ActionLog.LOGOUT);
         log.setDescription("Déconnexion utilisateur");
         this.create(log);
     }

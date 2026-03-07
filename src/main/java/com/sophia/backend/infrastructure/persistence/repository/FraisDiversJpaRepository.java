@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface FraisDiversJpaRepository extends JpaRepository<FraisDiversEntity, Long> {
     List<FraisDiversEntity> findByNiveauId(Long niveauId);
+    List<FraisDiversEntity> findByAnneeScolaireId(Long anneeScolaireId);
 }
 

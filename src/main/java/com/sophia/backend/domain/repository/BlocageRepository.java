@@ -7,7 +7,9 @@ import java.util.Optional;
 
 public interface BlocageRepository {
     Optional<Blocage> findById(Long id);
+    List<Blocage> findAll();
     List<Blocage> findByInscriptionId(Long inscriptionId);
+    List<Blocage> findActiveBlocks();
     Blocage save(Blocage blocage);
     void deleteById(Long id);
 }

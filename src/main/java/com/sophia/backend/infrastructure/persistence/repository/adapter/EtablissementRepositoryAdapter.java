@@ -41,5 +41,11 @@ public class EtablissementRepositoryAdapter implements EtablissementRepository {
     public void deleteById(Long id) {
         jpaRepository.deleteById(id);
     }
-}
 
+    @Override
+    public List<Etablissement> findByStatut(String statut) {
+        return jpaRepository.findByStatut(statut).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+}

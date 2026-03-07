@@ -1,6 +1,7 @@
 package com.sophia.backend.application.service;
 import com.sophia.backend.domain.model.Notification;
 import com.sophia.backend.domain.repository.NotificationRepository;
+import com.sophia.backend.domain.enums.TypeNotification;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class NotificationService {
     }
     public Notification notifierReçuDisponible(UUID directeurId, UUID secretaireId, String lien) {
         Notification notification = new Notification();
-        notification.setType("RECU_DISPONIBLE");
+        notification.setType(TypeNotification.RECU_DISPONIBLE);
         notification.setExpediteurId(secretaireId);
         notification.setDestinataireId(directeurId);
         notification.setContenu("Un nouveau reçu est disponible");
@@ -44,7 +45,7 @@ public class NotificationService {
     }
     public Notification alerterImpayesCritiques(UUID directeurId, int nombreImpayés) {
         Notification notification = new Notification();
-        notification.setType("ALERTE_IMPAYES");
+        notification.setType(TypeNotification.ALERTE_IMPAYES);
         notification.setExpediteurId(UUID.randomUUID());
         notification.setDestinataireId(directeurId);
         notification.setContenu("Alerte : " + nombreImpayés + " élèves en situation d'impayés");

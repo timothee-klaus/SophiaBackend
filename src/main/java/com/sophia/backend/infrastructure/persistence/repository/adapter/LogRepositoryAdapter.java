@@ -37,5 +37,16 @@ public class LogRepositoryAdapter implements LogRepository {
         LogEntity saved = jpaRepository.save(entity);
         return mapper.toDomain(saved);
     }
-}
 
+    @Override
+    public List<Log> findAll() {
+        return jpaRepository.findAll().stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        jpaRepository.deleteById(id);
+    }
+}

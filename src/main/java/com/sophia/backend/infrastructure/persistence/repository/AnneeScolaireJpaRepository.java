@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface AnneeScolaireJpaRepository extends JpaRepository<AnneeScolaireEntity, Long> {
     Optional<AnneeScolaireEntity> findByEstActive(Boolean estActive);
+    Optional<AnneeScolaireEntity> findByEstActiveTrue();
 }
 

@@ -41,5 +41,17 @@ public class BlocageRepositoryAdapter implements BlocageRepository {
     public void deleteById(Long id) {
         jpaRepository.deleteById(id);
     }
-}
+    @Override
+    public List<Blocage> findAll() {
+        return jpaRepository.findAll().stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
 
+    @Override
+    public List<Blocage> findActiveBlocks() {
+        return jpaRepository.findByEstActifTrue().stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+}

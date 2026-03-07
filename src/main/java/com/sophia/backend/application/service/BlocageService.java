@@ -1,6 +1,7 @@
 package com.sophia.backend.application.service;
 import com.sophia.backend.domain.model.Blocage;
 import com.sophia.backend.domain.repository.BlocageRepository;
+import com.sophia.backend.domain.enums.TypeBlocage;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class BlocageService {
     public Blocage bloquerInscription(Long inscriptionId, String typeBlocage, String raison) {
         Blocage blocage = new Blocage();
         blocage.setInscriptionId(inscriptionId);
-        blocage.setTypeBlocage(typeBlocage);
+        blocage.setTypeBlocage(TypeBlocage.valueOf(typeBlocage));
         blocage.setRaison(raison);
         blocage.setEstActif(true);
         return this.create(blocage);
@@ -49,6 +50,6 @@ public class BlocageService {
     }
     public boolean estBloquee(Long inscriptionId) {
         return this.findByInscriptionId(inscriptionId).stream()
-                .anyMatch(Blocage::getEstActif);
+                .anyMatch(Blocage::isEstActif);
     }
 }

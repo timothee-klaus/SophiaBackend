@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface AnneeScolaireRepository {
     Optional<AnneeScolaire> findById(Long id);
     List<AnneeScolaire> findAll();
+    Optional<AnneeScolaire> findActive();
     AnneeScolaire save(AnneeScolaire annee);
     void deleteById(Long id);
 }

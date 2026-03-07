@@ -2,6 +2,7 @@ package com.sophia.backend.application.service;
 
 import com.sophia.backend.domain.model.Inscription;
 import com.sophia.backend.domain.repository.InscriptionRepository;
+import com.sophia.backend.domain.enums.StatutInscription;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class InscriptionService {
      * Enregistrer le dépôt d'un dossier d'inscription
      */
     public Inscription enregistrerDossierInscription(Inscription inscription) {
-        inscription.setStatut("ACTIVE");
+        inscription.setStatut(StatutInscription.ACTIVE);
         return this.create(inscription);
     }
 
@@ -53,7 +54,7 @@ public class InscriptionService {
      */
     public Inscription validerPiecesInscription(Long inscriptionId) {
         return inscriptionRepository.findById(inscriptionId).map(inscription -> {
-            inscription.setStatut("VALIDEE");
+            inscription.setStatut(StatutInscription.ACTIVE);
             return inscriptionRepository.save(inscription);
         }).orElseThrow(() -> new IllegalArgumentException("Inscription non trouvée"));
     }
@@ -63,7 +64,7 @@ public class InscriptionService {
      */
     public Inscription enregistrerPaiementInscription(Long inscriptionId) {
         return inscriptionRepository.findById(inscriptionId).map(inscription -> {
-            inscription.setStatut("PAYEE");
+            inscription.setStatut(StatutInscription.ACTIVE);
             return inscriptionRepository.save(inscription);
         }).orElseThrow(() -> new IllegalArgumentException("Inscription non trouvée"));
     }
@@ -73,7 +74,7 @@ public class InscriptionService {
      */
     public List<Inscription> obtenirInscriptionsActives(UUID eleveId) {
         return this.findByEleveId(eleveId).stream()
-                .filter(i -> "ACTIVE".equals(i.getStatut()) || "VALIDEE".equals(i.getStatut()))
+                .filter(i -> i.getStatut() == StatutInscription.ACTIVE)
                 .toList();
     }
 
@@ -82,7 +83,7 @@ public class InscriptionService {
      */
     public void terminerInscription(Long inscriptionId) {
         inscriptionRepository.findById(inscriptionId).ifPresent(inscription -> {
-            inscription.setStatut("TERMINEE");
+            inscription.setStatut(StatutInscription.TERMINEE);
             inscriptionRepository.save(inscription);
         });
     }

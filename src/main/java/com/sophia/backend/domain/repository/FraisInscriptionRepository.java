@@ -9,6 +9,7 @@ public interface FraisInscriptionRepository {
     Optional<FraisInscription> findById(Long id);
     List<FraisInscription> findAll();
     List<FraisInscription> findByCycleId(Long cycleId);
+    List<FraisInscription> findByAnneeScolaireId(Long anneeScolaireId);
     FraisInscription save(FraisInscription frais);
     void deleteById(Long id);
 }

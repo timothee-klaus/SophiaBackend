@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface BlocageJpaRepository extends JpaRepository<BlocageEntity, Long> {
     List<BlocageEntity> findByInscriptionId(Long inscriptionId);
+    List<BlocageEntity> findByEstActifTrue();
 }
 

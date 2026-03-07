@@ -2,6 +2,7 @@ package com.sophia.backend.application.service;
 
 import com.sophia.backend.domain.model.Eleve;
 import com.sophia.backend.domain.repository.EleveRepository;
+import com.sophia.backend.domain.enums.StatutDossier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,7 +73,7 @@ public class EleveService {
      */
     public void archiverEleve(UUID id) {
         eleveRepository.findById(id).ifPresent(eleve -> {
-            eleve.setStatutDossier("ARCHIVÉ");
+            eleve.setStatutDossier(StatutDossier.INCOMPLET);
             eleveRepository.save(eleve);
         });
     }

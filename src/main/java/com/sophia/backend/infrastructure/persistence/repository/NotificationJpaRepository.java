@@ -10,6 +10,7 @@ import java.util.UUID;
 @Repository
 public interface NotificationJpaRepository extends JpaRepository<NotificationEntity, Long> {
     List<NotificationEntity> findByDestinataireId(UUID destinataireId);
-    List<NotificationEntity> findByExpediteursId(UUID expeditriceId);
+    List<NotificationEntity> findByExpediteurId(UUID expeditriceId);
+    List<NotificationEntity> findByDestinataireIdAndLuFalse(UUID destinataireId);
 }
 

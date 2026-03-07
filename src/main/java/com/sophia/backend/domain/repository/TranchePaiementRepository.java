@@ -7,8 +7,9 @@ import java.util.Optional;
 
 public interface TranchePaiementRepository {
     Optional<TranchePaiement> findById(Long id);
+    List<TranchePaiement> findAll();
     List<TranchePaiement> findByFraisScolaireId(Long fraisScolaireId);
-    TranchePaiement save(TranchePaiement tranche);
+    TranchePaiement save(TranchePaiement tranchePaiement);
     void deleteById(Long id);
 }
 

@@ -41,6 +41,11 @@ public class AnneeScolaireRepositoryAdapter implements AnneeScolaireRepository {
     public void deleteById(Long id) {
         jpaRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<AnneeScolaire> findActive() {
+        return jpaRepository.findByEstActiveTrue().stream()
+                .map(mapper::toDomain)
+                .findFirst();
+    }
 }
-
-

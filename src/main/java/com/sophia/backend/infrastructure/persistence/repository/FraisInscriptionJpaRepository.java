@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface FraisInscriptionJpaRepository extends JpaRepository<FraisInscriptionEntity, Long> {
     List<FraisInscriptionEntity> findByCycleId(Long cycleId);
+    List<FraisInscriptionEntity> findByAnneeScolaireId(Long anneeScolaireId);
 }
 
