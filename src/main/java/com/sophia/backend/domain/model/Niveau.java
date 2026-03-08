@@ -16,4 +16,5 @@ public class Niveau {
     private Long etablissementId;
     private Integer ordre;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

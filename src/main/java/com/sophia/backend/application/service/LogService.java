@@ -60,7 +60,7 @@ public class LogService {
         log.setUtilisateurId(utilisateurId);
         log.setAction(ActionLog.LOGIN);
         log.setDescription("Connexion utilisateur");
-        log.setIpAdresse(adresseIp);
+        log.setAdresseIp(adresseIp);
         log.setUserAgent(userAgent);
         this.create(log);
     }

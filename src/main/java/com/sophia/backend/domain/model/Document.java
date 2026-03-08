@@ -21,4 +21,5 @@ public class Document {
     private UUID utilisateurId;
     private String description;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

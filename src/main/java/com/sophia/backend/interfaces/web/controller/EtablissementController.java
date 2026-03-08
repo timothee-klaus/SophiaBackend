@@ -27,13 +27,10 @@ public class EtablissementController {
     private final EtablissementMapper mapper;
 
     @Operation(
-        summary = "Lister tous les etablissements",
-        description = "Retourne la liste de tous les etablissements du systeme.\n\n" +
-            "**Utilité**: Afficher tous les etablissements existants pour consultation ou selection.\n\n" +
-            "**Parametres**: Aucun\n\n" +
-            "**Reponse**: Array de EtablissementDTO avec (id, nom, adresse, telephone, email, logo, statut, dates)"
+        summary = "Lister tous les établissements",
+        description = "Retourne la liste de tous les établissements du système"
     )
-    @ApiResponse(responseCode = "200", description = "Liste des etablissements recuperee avec succes")
+    @ApiResponse(responseCode = "200", description = "Liste des établissements récupérée avec succès")
     @GetMapping
     public ResponseEntity<List<EtablissementDTO>> getAll() {
         List<EtablissementDTO> dtos = service.findAll().stream()
@@ -43,16 +40,12 @@ public class EtablissementController {
     }
 
     @Operation(
-        summary = "Recuperer un etablissement par ID",
-        description = "Retourne les details complets d'un etablissement specifique.\n\n" +
-            "**Utilité**: Consulter les informations detaillees d'un etablissement (nom, adresse, contact, logo).\n\n" +
-            "**Parametres**:\n" +
-            "- `id` (Long, path): Identifiant unique de l'etablissement\n\n" +
-            "**Reponse**: EtablissementDTO avec tous les details"
+        summary = "Récupérer un établissement",
+        description = "Retourne les détails complets d'un établissement spécifique"
     )
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Etablissement trouve"),
-        @ApiResponse(responseCode = "404", description = "Etablissement non trouve")
+        @ApiResponse(responseCode = "200", description = "Établissement trouvé"),
+        @ApiResponse(responseCode = "404", description = "Établissement non trouvé")
     })
     @GetMapping("/{id}")
     public ResponseEntity<EtablissementDTO> getById(@PathVariable Long id) {
@@ -62,36 +55,10 @@ public class EtablissementController {
     }
 
     @Operation(
-        summary = "Filtrer les etablissements par statut",
-        description = "Retourne les etablissements correspondant au statut specifie.\n\n" +
-            "**Utilité**: Afficher uniquement les etablissements actifs ou inactifs.\n\n" +
-            "**Parametres**:\n" +
-            "- `statut` (String, path): ACTIF ou INACTIF\n\n" +
-            "**Reponse**: List[EtablissementDTO] filtres par statut"
+        summary = "Créer un établissement",
+        description = "Crée un nouvel établissement scolaire (ex: Institut Sophia, Groupe Scolaire La Colombe)"
     )
-    @ApiResponse(responseCode = "200", description = "Etablissements filtres recuperes")
-    @GetMapping("/statut/{statut}")
-    public ResponseEntity<List<EtablissementDTO>> getByStatut(@PathVariable String statut) {
-        List<EtablissementDTO> dtos = service.findByStatut(statut).stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
-    }
-
-    @Operation(
-        summary = "Creer un nouvel etablissement",
-        description = "Cree un nouvel etablissement scolaire dans le systeme.\n\n" +
-            "**Utilité**: Ajouter une nouvelle ecole au systeme avec ses informations de base.\n\n" +
-            "**Corps de requete**: EtablissementDTO avec:\n" +
-            "- `nom` (String, requis): Nom de l'etablissement (ex: 'Institut Sophia')\n" +
-            "- `adresse` (String, requis): Adresse complete\n" +
-            "- `telephone` (String, requis): Numero de telephone\n" +
-            "- `email` (String, requis): Email de contact\n" +
-            "- `logo` (String, optionnel): Chemin/URL du logo\n" +
-            "- `statut` (String): ACTIF ou INACTIF\n\n" +
-            "**Reponse**: EtablissementDTO cree avec ID genere"
-    )
-    @ApiResponse(responseCode = "201", description = "Etablissement cree avec succes")
+    @ApiResponse(responseCode = "201", description = "Établissement créé avec succès")
     @PostMapping
     public ResponseEntity<EtablissementDTO> create(@RequestBody EtablissementDTO dto) {
         Etablissement etablissement = mapper.toDomain(dto);
@@ -100,18 +67,10 @@ public class EtablissementController {
     }
 
     @Operation(
-        summary = "Modifier un etablissement",
-        description = "Met a jour les informations d'un etablissement existant.\n\n" +
-            "**Utilité**: Changer les details d'une ecole (nom, adresse, contact, statut).\n\n" +
-            "**Parametres**:\n" +
-            "- `id` (Long, path): ID de l'etablissement a modifier\n\n" +
-            "**Corps**: Nouveaux details de l'etablissement\n\n" +
-            "**Reponse**: EtablissementDTO modifie"
+        summary = "Modifier un établissement",
+        description = "Modifie les informations d'un établissement existant"
     )
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Etablissement modifie avec succes"),
-        @ApiResponse(responseCode = "404", description = "Etablissement non trouve")
-    })
+    @ApiResponse(responseCode = "200", description = "Établissement modifié avec succès")
     @PutMapping("/{id}")
     public ResponseEntity<EtablissementDTO> update(@PathVariable Long id, @RequestBody EtablissementDTO dto) {
         Etablissement etablissement = mapper.toDomain(dto);
@@ -124,19 +83,13 @@ public class EtablissementController {
     }
 
     @Operation(
-        summary = "Supprimer un etablissement",
-        description = "Supprime un etablissement du systeme (suppression logique ou physique).\n\n" +
-            "**Utilité**: Retirer une ecole du systeme.\n\n" +
-            "**Parametres**:\n" +
-            "- `id` (Long, path): ID de l'etablissement a supprimer\n\n" +
-            "**Reponse**: Vide (204 No Content)"
+        summary = "Supprimer un établissement",
+        description = "Supprime un établissement du système"
     )
-    @ApiResponse(responseCode = "204", description = "Etablissement supprime avec succes")
+    @ApiResponse(responseCode = "204", description = "Établissement supprimé avec succès")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.supprimerEtablissement(id);
         return ResponseEntity.noContent().build();
     }
 }
-
-

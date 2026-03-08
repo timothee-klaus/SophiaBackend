@@ -2,16 +2,17 @@ package com.sophia.backend.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InscriptionDTO {
+@EqualsAndHashCode(callSuper = true)
+public class InscriptionDTO extends BaseDTO {
     private Long id;
     private UUID eleveId;
     private Long niveauId;
@@ -19,6 +20,4 @@ public class InscriptionDTO {
     private LocalDate dateInscription;
     private String statut;
     private String commentaire;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

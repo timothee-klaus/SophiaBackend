@@ -25,7 +25,17 @@ public class CycleController {
     private final CycleService service;
     private final CycleMapper mapper;
 
-    @Operation(summary = "Lister tous les cycles", description = "Retourne tous les cycles scolaires disponibles")
+    @Operation(summary = "Créer un cycle", description = "Crée un nouveau cycle scolaire (ex: Préscolaire, Primaire, Collège, Lycée)")
+    @ApiResponse(responseCode = "201", description = "Cycle créé avec succès")
+    @PostMapping
+    public ResponseEntity<CycleDTO> create(@RequestBody CycleDTO dto) {
+        Cycle cycle = mapper.toDomain(dto);
+        Cycle saved = service.create(cycle);
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
+    }
+
+    @Operation(summary = "Lister les cycles", description = "Retourne la liste de tous les cycles disponibles")
+    @ApiResponse(responseCode = "200", description = "Liste des cycles récupérée")
     @GetMapping
     public ResponseEntity<List<CycleDTO>> getAll() {
         List<CycleDTO> dtos = service.findAll().stream()
@@ -34,44 +44,26 @@ public class CycleController {
         return ResponseEntity.ok(dtos);
     }
 
-    @Operation(summary = "Recuperer un cycle par ID", description = "Retourne les details d'un cycle")
+    @Operation(summary = "Récupérer un cycle", description = "Retourne les détails d'un cycle spécifique")
     @GetMapping("/{id}")
-    public ResponseEntity<CycleDTO> getById(@Parameter(description = "ID du cycle") @PathVariable Long id) {
+    public ResponseEntity<CycleDTO> getById(@PathVariable Long id) {
         return service.findById(id)
                 .map(c -> ResponseEntity.ok(mapper.toDto(c)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Creer un cycle", description = "Cree un nouveau cycle scolaire")
-    @ApiResponse(responseCode = "201", description = "Cycle cree")
-    @PostMapping
-    public ResponseEntity<CycleDTO> create(@RequestBody CycleDTO dto) {
-        Cycle cycle = mapper.toDomain(dto);
-        Cycle saved = service.create(cycle);
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
-    }
-
-    @Operation(summary = "Modifier un cycle", description = "Met a jour un cycle existant")
+    @Operation(summary = "Modifier un cycle", description = "Modifie les informations d'un cycle")
     @PutMapping("/{id}")
-    public ResponseEntity<CycleDTO> update(@Parameter(description = "ID du cycle") @PathVariable Long id, @RequestBody CycleDTO dto) {
+    public ResponseEntity<CycleDTO> update(@PathVariable Long id, @RequestBody CycleDTO dto) {
         Cycle cycle = mapper.toDomain(dto);
         Cycle updated = service.update(cycle);
         return ResponseEntity.ok(mapper.toDto(updated));
     }
 
+    @Operation(summary = "Supprimer un cycle", description = "Supprime un cycle du système")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/disponibles")
-    public ResponseEntity<List<CycleDTO>> obtenirCyclesDisponibles() {
-        List<CycleDTO> dtos = service.obtenirCyclesDisponibles().stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
-    }
 }
-
-

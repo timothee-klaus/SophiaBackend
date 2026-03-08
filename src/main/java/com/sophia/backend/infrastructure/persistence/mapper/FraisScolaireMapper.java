@@ -9,7 +9,15 @@ import org.springframework.stereotype.Component;
 public class FraisScolaireMapper {
     public FraisScolaireDTO toDto(FraisScolaire f) {
         if (f == null) return null;
-        return new FraisScolaireDTO(f.getId(), f.getNiveauId(), f.getAnneeScolaireId(), f.getMontantTotal(), f.getDescription(), f.getCreatedAt(), f.getUpdatedAt());
+        FraisScolaireDTO dto = new FraisScolaireDTO();
+        dto.setId(f.getId());
+        dto.setNiveauId(f.getNiveauId());
+        dto.setAnneeScolaireId(f.getAnneeScolaireId());
+        dto.setMontantTotal(f.getMontantTotal());
+        dto.setDescription(f.getDescription());
+        dto.setCreatedAt(f.getCreatedAt());
+        dto.setUpdatedAt(f.getUpdatedAt());
+        return dto;
     }
 
     public FraisScolaire toDomain(FraisScolaireDTO d) {

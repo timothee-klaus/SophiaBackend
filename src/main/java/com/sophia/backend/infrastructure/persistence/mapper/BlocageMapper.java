@@ -10,7 +10,19 @@ import org.springframework.stereotype.Component;
 public class BlocageMapper {
     public BlocageDTO toDto(Blocage b) {
         if (b == null) return null;
-        return new BlocageDTO(b.getId(), b.getInscriptionId(), b.getTypeBlocage() != null ? b.getTypeBlocage().name() : null, b.getRaison(), b.getDateDebut(), b.getDateFin(), b.isEstActif(), b.getLevePar(), b.getDateLevee(), b.getCreatedAt());
+        BlocageDTO dto = new BlocageDTO();
+        dto.setId(b.getId());
+        dto.setInscriptionId(b.getInscriptionId());
+        dto.setTypeBlocage(b.getTypeBlocage() != null ? b.getTypeBlocage().name() : null);
+        dto.setRaison(b.getRaison());
+        dto.setDateDebut(b.getDateDebut());
+        dto.setDateFin(b.getDateFin());
+        dto.setEstActif(b.isEstActif());
+        dto.setLevePar(b.getLevePar());
+        dto.setDateLevee(b.getDateLevee());
+        dto.setCreatedAt(b.getCreatedAt());
+        dto.setUpdatedAt(b.getUpdatedAt());
+        return dto;
     }
 
     public Blocage toDomain(BlocageDTO d) {
@@ -18,13 +30,18 @@ public class BlocageMapper {
         Blocage b = new Blocage();
         b.setId(d.getId());
         b.setInscriptionId(d.getInscriptionId());
+        if (d.getTypeBlocage() != null) {
+            try {
+                b.setTypeBlocage(TypeBlocage.valueOf(d.getTypeBlocage()));
+            } catch (IllegalArgumentException ex) {}
+        }
         b.setRaison(d.getRaison());
         b.setDateDebut(d.getDateDebut());
         b.setDateFin(d.getDateFin());
         b.setEstActif(d.isEstActif());
         b.setLevePar(d.getLevePar());
         b.setDateLevee(d.getDateLevee());
-        b.setCreatedAt(d.getCreatedAt());
+        // Ne pas mapper createdAt, updatedAt (READ_ONLY)
         return b;
     }
 
@@ -41,6 +58,7 @@ public class BlocageMapper {
         b.setLevePar(e.getLevePar());
         b.setDateLevee(e.getDateLevee());
         b.setCreatedAt(e.getCreatedAt());
+        b.setUpdatedAt(e.getUpdatedAt());
         return b;
     }
 
@@ -57,6 +75,7 @@ public class BlocageMapper {
         e.setLevePar(b.getLevePar());
         e.setDateLevee(b.getDateLevee());
         e.setCreatedAt(b.getCreatedAt());
+        e.setUpdatedAt(b.getUpdatedAt());
         return e;
     }
 }

@@ -23,4 +23,5 @@ public class Blocage {
     private UUID levePar;
     private LocalDateTime dateLevee;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

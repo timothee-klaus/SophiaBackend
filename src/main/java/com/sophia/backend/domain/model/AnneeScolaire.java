@@ -17,4 +17,5 @@ public class AnneeScolaire {
     private LocalDate dateFin;
     private boolean estActive;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

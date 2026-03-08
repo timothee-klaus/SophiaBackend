@@ -3,16 +3,16 @@ package com.sophia.backend.infrastructure.persistence.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "niveau")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NiveauEntity {
+@EqualsAndHashCode(callSuper = true)
+public class NiveauEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,6 +21,5 @@ public class NiveauEntity {
     private Long cycleId;
     private Long etablissementId;
     private Integer ordre;
-    private LocalDateTime createdAt;
 }
 

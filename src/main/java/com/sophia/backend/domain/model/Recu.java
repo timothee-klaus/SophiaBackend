@@ -21,4 +21,5 @@ public class Recu {
     private RecuStatut statut;
     private String cheminFichier;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

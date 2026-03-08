@@ -27,44 +27,10 @@ public class EleveController {
     private final EleveService service;
     private final EleveMapper mapper;
 
-    @Operation(summary = "Lister tous les eleves", description = "Retourne la liste complete de tous les eleves inscrits dans le systeme")
-    @ApiResponse(responseCode = "200", description = "Liste des eleves recuperee avec succes")
-    @GetMapping
-    public ResponseEntity<List<EleveDTO>> getAll() {
-        List<EleveDTO> dtos = service.findAll().stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
-    }
-
-    @Operation(summary = "Recuperer un eleve par ID", description = "Retourne les details complets d'un eleve specifique")
+    @Operation(summary = "Créer un dossier élève", description = "Crée un nouveau dossier d'élève")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Eleve trouve"),
-        @ApiResponse(responseCode = "404", description = "Eleve non trouve")
-    })
-    @GetMapping("/{id}")
-    public ResponseEntity<EleveDTO> getById(@Parameter(description = "ID unique de l'eleve (UUID)") @PathVariable UUID id) {
-        return service.findById(id)
-                .map(e -> ResponseEntity.ok(mapper.toDto(e)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @Operation(summary = "Rechercher par matricule", description = "Recherche un eleve par son numero de matricule unique")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Eleve trouve"),
-        @ApiResponse(responseCode = "404", description = "Aucun eleve avec cette matricule")
-    })
-    @GetMapping("/matricule/{matricule}")
-    public ResponseEntity<EleveDTO> getByMatricule(@Parameter(description = "Matricule de l'eleve") @PathVariable String matricule) {
-        return service.findByMatricule(matricule)
-                .map(e -> ResponseEntity.ok(mapper.toDto(e)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @Operation(summary = "Creer un nouveau dossier eleve", description = "Cree un nouveau dossier eleve avec toutes les informations personnelles et du tuteur")
-    @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "Dossier eleve cree avec succes"),
-        @ApiResponse(responseCode = "400", description = "Donnees invalides")
+        @ApiResponse(responseCode = "201", description = "Dossier élève créé avec succès"),
+        @ApiResponse(responseCode = "400", description = "Données invalides")
     })
     @PostMapping
     public ResponseEntity<EleveDTO> create(@RequestBody EleveDTO dto) {
@@ -73,10 +39,32 @@ public class EleveController {
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
     }
 
-    @Operation(summary = "Modifier un eleve", description = "Met a jour les informations d'un eleve existant")
+    @Operation(summary = "Lister les élèves", description = "Retourne la liste de tous les élèves")
+    @ApiResponse(responseCode = "200", description = "Liste des élèves récupérée avec succès")
+    @GetMapping
+    public ResponseEntity<List<EleveDTO>> getAll() {
+        List<EleveDTO> dtos = service.findAll().stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
+    }
+
+    @Operation(summary = "Récupérer un élève", description = "Retourne les informations complètes d'un élève")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Eleve modifie avec succes"),
-        @ApiResponse(responseCode = "404", description = "Eleve non trouve")
+        @ApiResponse(responseCode = "200", description = "Élève trouvé"),
+        @ApiResponse(responseCode = "404", description = "Élève non trouvé")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<EleveDTO> getById(@Parameter(description = "ID unique de l'eleve (UUID)") @PathVariable UUID id) {
+        return service.findById(id)
+                .map(e -> ResponseEntity.ok(mapper.toDto(e)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "Modifier un élève", description = "Modifie les informations d'un élève")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Élève modifié avec succès"),
+        @ApiResponse(responseCode = "404", description = "Élève non trouvé")
     })
     @PutMapping("/{id}")
     public ResponseEntity<EleveDTO> update(@Parameter(description = "ID de l'eleve") @PathVariable UUID id, @RequestBody EleveDTO dto) {
@@ -89,35 +77,11 @@ public class EleveController {
         }
     }
 
-    @Operation(summary = "Supprimer un eleve", description = "Supprime definitivement un dossier eleve du systeme")
-    @ApiResponses({
-        @ApiResponse(responseCode = "204", description = "Eleve supprime"),
-        @ApiResponse(responseCode = "404", description = "Eleve non trouve")
-    })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@Parameter(description = "ID de l'eleve") @PathVariable UUID id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @Operation(summary = "Archiver un eleve", description = "Archive un eleve (depart, fin de cycle) sans le supprimer")
-    @ApiResponse(responseCode = "200", description = "Eleve archive avec succes")
+    @Operation(summary = "Archiver un élève", description = "Archive un élève (départ, fin de cycle)")
+    @ApiResponse(responseCode = "200", description = "Élève archivé avec succès")
     @PostMapping("/{id}/archiver")
-    public ResponseEntity<Void> archiver(@Parameter(description = "ID de l'eleve a archiver") @PathVariable UUID id) {
+    public ResponseEntity<EleveDTO> archiver(@Parameter(description = "ID de l'eleve a archiver") @PathVariable UUID id) {
         service.archiverEleve(id);
         return ResponseEntity.ok().build();
     }
-
-    @Operation(summary = "Rechercher un eleve", description = "Recherche detaillee d'un eleve avec toutes ses informations")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Eleve trouve"),
-        @ApiResponse(responseCode = "404", description = "Eleve non trouve")
-    })
-    @GetMapping("/{id}/rechercher")
-    public ResponseEntity<EleveDTO> rechercher(@Parameter(description = "ID de l'eleve") @PathVariable UUID id) {
-        return service.rechercherEleve(id)
-                .map(e -> ResponseEntity.ok(mapper.toDto(e)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
 }
-

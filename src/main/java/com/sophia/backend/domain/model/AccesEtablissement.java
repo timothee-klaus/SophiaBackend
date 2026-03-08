@@ -15,4 +15,5 @@ public class AccesEtablissement {
     private UUID utilisateurId;
     private Long etablissementId;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

@@ -26,7 +26,15 @@ public class BlocageController {
     private final BlocageService service;
     private final BlocageMapper mapper;
 
-    @Operation(summary = "Lister tous les blocages", description = "Retourne la liste de tous les blocages du systeme")
+    @Operation(summary = "Créer un blocage", description = "Marque un élève comme non autorisé à composer si conditions non remplies (ex: deux premières tranches non payées)")
+    @ApiResponse(responseCode = "201", description = "Blocage cree avec succes")
+    @PostMapping
+    public ResponseEntity<BlocageDTO> create(@RequestBody BlocageDTO dto) {
+        Blocage blocage = service.bloquerInscription(dto.getInscriptionId(), dto.getTypeBlocage(), dto.getRaison());
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(blocage));
+    }
+
+    @Operation(summary = "Lister les blocages", description = "Retourne la liste de tous les blocages")
     @ApiResponse(responseCode = "200", description = "Liste des blocages")
     @GetMapping
     public ResponseEntity<List<BlocageDTO>> getAll() {
@@ -36,7 +44,7 @@ public class BlocageController {
         return ResponseEntity.ok(dtos);
     }
 
-    @Operation(summary = "Recuperer un blocage par ID", description = "Retourne les details d'un blocage")
+    @Operation(summary = "Récupérer un blocage", description = "Retourne les détails d'un blocage spécifique")
     @GetMapping("/{id}")
     public ResponseEntity<BlocageDTO> getById(@Parameter(description = "ID du blocage") @PathVariable Long id) {
         return service.findById(id)
@@ -44,52 +52,17 @@ public class BlocageController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Blocages d'une inscription", description = "Liste tous les blocages appliques a une inscription")
-    @GetMapping("/inscription/{inscriptionId}")
-    public ResponseEntity<List<BlocageDTO>> getByInscriptionId(@Parameter(description = "ID de l'inscription") @PathVariable Long inscriptionId) {
-        List<BlocageDTO> dtos = service.findByInscriptionId(inscriptionId).stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
-    }
-
-    @Operation(summary = "Blocages actifs", description = "Liste tous les blocages actuellement actifs")
-    @GetMapping("/actifs")
-    public ResponseEntity<List<BlocageDTO>> getActiveBlocks() {
-        List<BlocageDTO> dtos = service.findActiveBlocks().stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
-    }
-
-    @Operation(summary = "Bloquer une inscription", description = "Marque un eleve comme non autorise a composer (EXAMEN ou EVALUATION)")
-    @ApiResponse(responseCode = "201", description = "Blocage cree avec succes")
-    @PostMapping("/bloquer")
-    public ResponseEntity<BlocageDTO> bloquer(
-            @Parameter(description = "ID de l'inscription") @RequestParam Long inscriptionId,
-            @Parameter(description = "Type: EXAMEN ou EVALUATION") @RequestParam String typeBlocage,
-            @Parameter(description = "Raison du blocage") @RequestParam String raison) {
-        Blocage blocage = service.bloquerInscription(inscriptionId, typeBlocage, raison);
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(blocage));
-    }
-
+    @Operation(summary = "Lever un blocage", description = "Lève le blocage après régularisation du paiement")
     @PostMapping("/{id}/lever")
-    public ResponseEntity<Void> lever(@PathVariable Long id, @RequestParam UUID utilisateurId) {
-        service.leverBlocage(id, utilisateurId);
+    public ResponseEntity<BlocageDTO> leverBlocage(@PathVariable Long id) {
+        service.leverBlocage(id, null);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/inscription/{inscriptionId}/est-bloquee")
-    public ResponseEntity<Boolean> estBloquee(@PathVariable Long inscriptionId) {
-        boolean bloquee = service.estBloquee(inscriptionId);
-        return ResponseEntity.ok(bloquee);
-    }
-
+    @Operation(summary = "Supprimer un blocage", description = "Supprime un blocage")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
-
-

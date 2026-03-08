@@ -2,19 +2,19 @@ package com.sophia.backend.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FraisInscriptionDTO {
+@EqualsAndHashCode(callSuper = true)
+public class FraisInscriptionDTO extends BaseDTO {
     private Long id;
     private Long cycleId;
     private Long niveauId;
     private Long anneeScolaireId;
     private BigDecimal montant;
-    private LocalDateTime createdAt;
 }

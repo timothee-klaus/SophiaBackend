@@ -2,16 +2,17 @@ package com.sophia.backend.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EleveDTO {
+@EqualsAndHashCode(callSuper = true)
+public class EleveDTO extends BaseDTO {
     private UUID id;
     private String matricule;
     private String nom;
@@ -29,6 +30,4 @@ public class EleveDTO {
     private Long etablissementId;
     private String statutDossier;
     private LocalDate dateCreationDossier;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

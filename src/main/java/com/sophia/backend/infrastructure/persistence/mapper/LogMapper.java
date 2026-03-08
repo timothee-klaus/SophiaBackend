@@ -1,8 +1,7 @@
 package com.sophia.backend.infrastructure.persistence.mapper;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.sophia.backend.application.dto.LogDTO;
-import com.sophia.backend.domain.enums.ActionLog;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.sophia.backend.domain.model.Log;
 import com.sophia.backend.infrastructure.persistence.entity.LogEntity;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,21 @@ import java.util.UUID;
 public class LogMapper {
     public LogDTO toDto(Log l) {
         if (l == null) return null;
-        return new LogDTO(l.getId(), l.getUtilisateurId(), l.getAction() != null ? l.getAction().name() : null, l.getEntite(), l.getEntiteId(), l.getAnciennesValeurs(), l.getNouvellesValeurs(), l.getIpAdresse(), l.getUserAgent(), l.getDateAction(), l.getDescription());
+        LogDTO dto = new LogDTO();
+        dto.setId(l.getId());
+        dto.setUtilisateurId(l.getUtilisateurId());
+        dto.setAction(l.getAction() != null ? l.getAction().name() : null);
+        dto.setEntite(l.getEntite());
+        dto.setEntiteId(l.getEntiteId());
+        dto.setAnciennesValeurs(l.getAnciennesValeurs());
+        dto.setNouvellesValeurs(l.getNouvellesValeurs());
+        dto.setAdresseIp(l.getAdresseIp());
+        dto.setUserAgent(l.getUserAgent());
+        dto.setDateAction(l.getDateAction());
+        dto.setDescription(l.getDescription());
+        dto.setCreatedAt(l.getCreatedAt());
+        dto.setUpdatedAt(l.getUpdatedAt());
+        return dto;
     }
 
     public Log toDomain(LogDTO d) {
@@ -23,16 +36,19 @@ public class LogMapper {
         l.setId(d.getId());
         l.setUtilisateurId(d.getUtilisateurId());
         if (d.getAction() != null) {
-            try { l.setAction(ActionLog.valueOf(d.getAction())); } catch (IllegalArgumentException ex) {}
+            try {
+                l.setAction(com.sophia.backend.domain.enums.ActionLog.valueOf(d.getAction()));
+            } catch (IllegalArgumentException ex) {}
         }
         l.setEntite(d.getEntite());
         l.setEntiteId(d.getEntiteId());
         l.setAnciennesValeurs(d.getAnciennesValeurs());
         l.setNouvellesValeurs(d.getNouvellesValeurs());
-        l.setIpAdresse(d.getIpAdresse());
+        l.setAdresseIp(d.getAdresseIp());
         l.setUserAgent(d.getUserAgent());
         l.setDateAction(d.getDateAction());
         l.setDescription(d.getDescription());
+        // Ne pas mapper createdAt, updatedAt (READ_ONLY)
         return l;
     }
 
@@ -46,10 +62,12 @@ public class LogMapper {
         l.setEntiteId(e.getEntiteId());
         l.setAnciennesValeurs(e.getAnciennesValeurs());
         l.setNouvellesValeurs(e.getNouvellesValeurs());
-        l.setIpAdresse(e.getIpAdresse());
+        l.setAdresseIp(e.getAdresseIp());
         l.setUserAgent(e.getUserAgent());
         l.setDateAction(e.getDateAction());
         l.setDescription(e.getDescription());
+        l.setCreatedAt(e.getCreatedAt());
+        l.setUpdatedAt(e.getUpdatedAt());
         return l;
     }
 
@@ -63,11 +81,12 @@ public class LogMapper {
         e.setEntiteId(l.getEntiteId());
         e.setAnciennesValeurs(l.getAnciennesValeurs());
         e.setNouvellesValeurs(l.getNouvellesValeurs());
-        e.setIpAdresse(l.getIpAdresse());
+        e.setAdresseIp(l.getAdresseIp());
         e.setUserAgent(l.getUserAgent());
         e.setDateAction(l.getDateAction());
         e.setDescription(l.getDescription());
+        e.setCreatedAt(l.getCreatedAt());
+        e.setUpdatedAt(l.getUpdatedAt());
         return e;
     }
 }
-

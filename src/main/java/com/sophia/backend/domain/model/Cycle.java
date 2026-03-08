@@ -15,4 +15,5 @@ public class Cycle {
     private String description;
     private Integer ordre;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

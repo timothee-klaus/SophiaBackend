@@ -10,7 +10,18 @@ import org.springframework.stereotype.Component;
 public class RecuMapper {
     public RecuDTO toDto(Recu r) {
         if (r == null) return null;
-        return new RecuDTO(r.getId(), r.getPaiementId(), r.getDemandePar(), r.getDateDemande(), r.getTraitePar(), r.getDateTraitement(), r.getStatut() != null ? r.getStatut().name() : null, r.getCheminFichier(), r.getCreatedAt());
+        RecuDTO dto = new RecuDTO();
+        dto.setId(r.getId());
+        dto.setPaiementId(r.getPaiementId());
+        dto.setDemandePar(r.getDemandePar());
+        dto.setDateDemande(r.getDateDemande());
+        dto.setTraitePar(r.getTraitePar());
+        dto.setDateTraitement(r.getDateTraitement());
+        dto.setStatut(r.getStatut() != null ? r.getStatut().name() : null);
+        dto.setCheminFichier(r.getCheminFichier());
+        dto.setCreatedAt(r.getCreatedAt());
+        dto.setUpdatedAt(r.getUpdatedAt());
+        return dto;
     }
 
     public Recu toDomain(RecuDTO d) {
@@ -23,7 +34,12 @@ public class RecuMapper {
         r.setTraitePar(d.getTraitePar());
         r.setDateTraitement(d.getDateTraitement());
         r.setCheminFichier(d.getCheminFichier());
-        r.setCreatedAt(d.getCreatedAt());
+        if (d.getStatut() != null) {
+            try {
+                r.setStatut(RecuStatut.valueOf(d.getStatut()));
+            } catch (IllegalArgumentException ex) {}
+        }
+        // Ne pas mapper createdAt, updatedAt (READ_ONLY)
         return r;
     }
 
@@ -39,6 +55,7 @@ public class RecuMapper {
         r.setStatut(e.getStatut());
         r.setCheminFichier(e.getCheminFichier());
         r.setCreatedAt(e.getCreatedAt());
+        r.setUpdatedAt(e.getUpdatedAt());
         return r;
     }
 
@@ -54,6 +71,7 @@ public class RecuMapper {
         e.setStatut(r.getStatut());
         e.setCheminFichier(r.getCheminFichier());
         e.setCreatedAt(r.getCreatedAt());
+        e.setUpdatedAt(r.getUpdatedAt());
         return e;
     }
 }

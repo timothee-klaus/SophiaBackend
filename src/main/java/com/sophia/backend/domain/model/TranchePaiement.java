@@ -20,4 +20,5 @@ public class TranchePaiement {
     private LocalDate dateLimiteFin;
     private Integer ordre;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

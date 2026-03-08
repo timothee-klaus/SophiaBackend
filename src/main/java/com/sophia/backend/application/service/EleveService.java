@@ -12,9 +12,11 @@ import java.util.UUID;
 @Service
 public class EleveService {
     private final EleveRepository eleveRepository;
+    private final LogService logService;
 
-    public EleveService(EleveRepository eleveRepository) {
+    public EleveService(EleveRepository eleveRepository, LogService logService) {
         this.eleveRepository = eleveRepository;
+        this.logService = logService;
     }
 
     public Optional<Eleve> findById(UUID id) {
@@ -45,14 +47,28 @@ public class EleveService {
      * Créer un nouveau dossier élève
      */
     public Eleve creerDossierEleve(Eleve eleve) {
-        return this.create(eleve);
+        Eleve saved = this.create(eleve);
+
+        // Enregistrer la création dans les logs
+        try {
+            logService.enregistrerCreation(
+                UUID.randomUUID(), // À remplacer par l'utilisateur connecté
+                "ELEVE",
+                saved.getId().toString(),
+                "Creation dossier eleve: " + saved.getMatricule()
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return saved;
     }
 
     /**
      * Consulter/modifier les informations d'un élève
      */
     public Eleve modifierEleve(UUID id, Eleve eleveUpdated) {
-        return eleveRepository.findById(id).map(existant -> {
+        Eleve result = eleveRepository.findById(id).map(existant -> {
             existant.setNom(eleveUpdated.getNom());
             existant.setPrenom(eleveUpdated.getPrenom());
             existant.setDateNaissance(eleveUpdated.getDateNaissance());
@@ -66,6 +82,22 @@ public class EleveService {
             existant.setPhotoPath(eleveUpdated.getPhotoPath());
             return eleveRepository.save(existant);
         }).orElseThrow(() -> new IllegalArgumentException("Élève non trouvé"));
+
+        // Enregistrer la modification dans les logs
+        try {
+            logService.enregistrerModification(
+                UUID.randomUUID(),
+                "ELEVE",
+                id.toString(),
+                "",
+                "",
+                "Modification dossier eleve: " + result.getMatricule()
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     /**
@@ -75,6 +107,20 @@ public class EleveService {
         eleveRepository.findById(id).ifPresent(eleve -> {
             eleve.setStatutDossier(StatutDossier.INCOMPLET);
             eleveRepository.save(eleve);
+
+            // Enregistrer l'archivage dans les logs
+            try {
+                logService.enregistrerModification(
+                    UUID.randomUUID(),
+                    "ELEVE",
+                    id.toString(),
+                    "",
+                    "",
+                    "Archivage eleve: " + eleve.getMatricule()
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 

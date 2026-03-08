@@ -5,10 +5,10 @@ import com.sophia.backend.domain.enums.StatutDossier;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -16,7 +16,8 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EleveEntity {
+@EqualsAndHashCode(callSuper = true)
+public class EleveEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
@@ -44,12 +45,4 @@ public class EleveEntity {
     private StatutDossier statutDossier;
 
     private LocalDate dateCreationDossier;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 }

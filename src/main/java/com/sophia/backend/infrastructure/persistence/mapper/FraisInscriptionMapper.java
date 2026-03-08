@@ -9,7 +9,15 @@ import org.springframework.stereotype.Component;
 public class FraisInscriptionMapper {
     public FraisInscriptionDTO toDto(FraisInscription f) {
         if (f == null) return null;
-        return new FraisInscriptionDTO(f.getId(), f.getCycleId(), f.getNiveauId(), f.getAnneeScolaireId(), f.getMontant(), f.getCreatedAt());
+        FraisInscriptionDTO dto = new FraisInscriptionDTO();
+        dto.setId(f.getId());
+        dto.setCycleId(f.getCycleId());
+        dto.setNiveauId(f.getNiveauId());
+        dto.setAnneeScolaireId(f.getAnneeScolaireId());
+        dto.setMontant(f.getMontant());
+        dto.setCreatedAt(f.getCreatedAt());
+        dto.setUpdatedAt(f.getUpdatedAt());
+        return dto;
     }
 
     public FraisInscription toDomain(FraisInscriptionDTO d) {
@@ -20,7 +28,7 @@ public class FraisInscriptionMapper {
         f.setNiveauId(d.getNiveauId());
         f.setAnneeScolaireId(d.getAnneeScolaireId());
         f.setMontant(d.getMontant());
-        f.setCreatedAt(d.getCreatedAt());
+        // Ne pas mapper createdAt/updatedAt (READ_ONLY)
         return f;
     }
 
@@ -33,6 +41,7 @@ public class FraisInscriptionMapper {
         f.setAnneeScolaireId(e.getAnneeScolaireId());
         f.setMontant(e.getMontant());
         f.setCreatedAt(e.getCreatedAt());
+        f.setUpdatedAt(e.getUpdatedAt());
         return f;
     }
 
@@ -45,6 +54,7 @@ public class FraisInscriptionMapper {
         e.setAnneeScolaireId(f.getAnneeScolaireId());
         e.setMontant(f.getMontant());
         e.setCreatedAt(f.getCreatedAt());
+        e.setUpdatedAt(f.getUpdatedAt());
         return e;
     }
 }

@@ -4,6 +4,7 @@ import com.sophia.backend.domain.enums.TypeDocument;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,8 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DocumentEntity {
+@EqualsAndHashCode(callSuper = true)
+public class DocumentEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,7 +33,5 @@ public class DocumentEntity {
 
     @Column(columnDefinition = "text")
     private String description;
-
-    private LocalDateTime createdAt;
 }
 

@@ -17,4 +17,5 @@ public class FraisInscription {
     private Long anneeScolaireId;
     private BigDecimal montant;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

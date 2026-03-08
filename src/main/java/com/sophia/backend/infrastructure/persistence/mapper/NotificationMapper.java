@@ -2,7 +2,6 @@ package com.sophia.backend.infrastructure.persistence.mapper;
 
 import com.sophia.backend.application.dto.NotificationDTO;
 import com.sophia.backend.domain.model.Notification;
-import com.sophia.backend.domain.enums.TypeNotification;
 import com.sophia.backend.infrastructure.persistence.entity.NotificationEntity;
 import org.springframework.stereotype.Component;
 
@@ -10,20 +9,36 @@ import org.springframework.stereotype.Component;
 public class NotificationMapper {
     public NotificationDTO toDto(Notification n) {
         if (n == null) return null;
-        return new NotificationDTO(n.getId(), n.getType() != null ? n.getType().name() : null, n.getExpediteurId(), n.getDestinataireId(), n.getContenu(), n.isLu(), n.getDateCreation(), n.getLien(), n.getCreatedAt());
+        NotificationDTO dto = new NotificationDTO();
+        dto.setId(n.getId());
+        dto.setType(n.getType() != null ? n.getType().name() : null);
+        dto.setExpediteurId(n.getExpediteurId());
+        dto.setDestinataireId(n.getDestinataireId());
+        dto.setContenu(n.getContenu());
+        dto.setLu(n.isLu());
+        dto.setDateCreation(n.getDateCreation());
+        dto.setLien(n.getLien());
+        dto.setCreatedAt(n.getCreatedAt());
+        dto.setUpdatedAt(n.getUpdatedAt());
+        return dto;
     }
 
     public Notification toDomain(NotificationDTO d) {
         if (d == null) return null;
         Notification n = new Notification();
         n.setId(d.getId());
+        if (d.getType() != null) {
+            try {
+                n.setType(com.sophia.backend.domain.enums.TypeNotification.valueOf(d.getType()));
+            } catch (IllegalArgumentException ex) {}
+        }
         n.setExpediteurId(d.getExpediteurId());
         n.setDestinataireId(d.getDestinataireId());
         n.setContenu(d.getContenu());
         n.setLu(d.isLu());
         n.setDateCreation(d.getDateCreation());
         n.setLien(d.getLien());
-        n.setCreatedAt(d.getCreatedAt());
+        // Ne pas mapper createdAt, updatedAt (READ_ONLY)
         return n;
     }
 
@@ -39,6 +54,7 @@ public class NotificationMapper {
         n.setDateCreation(e.getDateCreation());
         n.setLien(e.getLien());
         n.setCreatedAt(e.getCreatedAt());
+        n.setUpdatedAt(e.getUpdatedAt());
         return n;
     }
 
@@ -54,7 +70,7 @@ public class NotificationMapper {
         e.setDateCreation(n.getDateCreation());
         e.setLien(n.getLien());
         e.setCreatedAt(n.getCreatedAt());
+        e.setUpdatedAt(n.getUpdatedAt());
         return e;
     }
 }
-

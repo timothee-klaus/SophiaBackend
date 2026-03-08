@@ -23,8 +23,10 @@ public class Log {
     private String entiteId;
     private JsonNode anciennesValeurs;
     private JsonNode nouvellesValeurs;
-    private String ipAdresse;
+    private String adresseIp;
     private String userAgent;
     private LocalDateTime dateAction;
     private String description;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

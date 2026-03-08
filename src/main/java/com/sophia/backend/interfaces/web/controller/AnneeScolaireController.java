@@ -25,7 +25,15 @@ public class AnneeScolaireController {
     private final AnneeScolaireService service;
     private final AnneeScolaireMapper mapper;
 
-    @Operation(summary = "Lister toutes les annees scolaires", description = "Retourne toutes les annees scolaires")
+    @Operation(summary = "Créer année scolaire", description = "Crée une nouvelle année scolaire (ex: 2024-2025, 2025-2026)")
+    @PostMapping
+    public ResponseEntity<AnneeScolaireDTO> create(@RequestBody AnneeScolaireDTO dto) {
+        AnneeScolaire annee = mapper.toDomain(dto);
+        AnneeScolaire saved = service.create(annee);
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
+    }
+
+    @Operation(summary = "Lister les années scolaires", description = "Retourne la liste de toutes les années scolaires")
     @GetMapping
     public ResponseEntity<List<AnneeScolaireDTO>> getAll() {
         List<AnneeScolaireDTO> dtos = service.findAll().stream()
@@ -34,7 +42,7 @@ public class AnneeScolaireController {
         return ResponseEntity.ok(dtos);
     }
 
-    @Operation(summary = "Recuperer une annee scolaire par ID", description = "Retourne les details d'une annee scolaire")
+    @Operation(summary = "Récupérer une année scolaire", description = "Retourne les détails d'une année scolaire spécifique")
     @GetMapping("/{id}")
     public ResponseEntity<AnneeScolaireDTO> getById(@Parameter(description = "ID de l'annee scolaire") @PathVariable Long id) {
         return service.findById(id)
@@ -42,7 +50,7 @@ public class AnneeScolaireController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Annee scolaire active", description = "Retourne l'annee scolaire actuellement active")
+    @Operation(summary = "Année scolaire active", description = "Retourne l'année scolaire actuellement active")
     @GetMapping("/active")
     public ResponseEntity<AnneeScolaireDTO> getActive() {
         return service.obtenirAnneeScolaireActive()
@@ -50,22 +58,7 @@ public class AnneeScolaireController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Creer une annee scolaire", description = "Cree une nouvelle annee scolaire (ex: 2024-2025)")
-    @ApiResponse(responseCode = "201", description = "Annee scolaire creee")
-    @PostMapping
-    public ResponseEntity<AnneeScolaireDTO> create(@RequestBody AnneeScolaireDTO dto) {
-        AnneeScolaire annee = mapper.toDomain(dto);
-        AnneeScolaire saved = service.create(annee);
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
-    }
-
-    @PostMapping("/ouvrir")
-    public ResponseEntity<AnneeScolaireDTO> ouvrir(@RequestBody AnneeScolaireDTO dto) {
-        AnneeScolaire annee = mapper.toDomain(dto);
-        AnneeScolaire opened = service.ouvrirAnneeScolaire(annee);
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(opened));
-    }
-
+    @Operation(summary = "Modifier une année scolaire", description = "Modifie une année scolaire (ouvrir/clôturer)")
     @PutMapping("/{id}")
     public ResponseEntity<AnneeScolaireDTO> update(@PathVariable Long id, @RequestBody AnneeScolaireDTO dto) {
         AnneeScolaire annee = mapper.toDomain(dto);
@@ -73,17 +66,10 @@ public class AnneeScolaireController {
         return ResponseEntity.ok(mapper.toDto(updated));
     }
 
+    @Operation(summary = "Supprimer une année scolaire", description = "Supprime une année scolaire")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-
-    @PostMapping("/{id}/cloturer")
-    public ResponseEntity<Void> cloturer(@PathVariable Long id) {
-        service.cloturerAnneeScolaire(id);
-        return ResponseEntity.ok().build();
-    }
 }
-
-

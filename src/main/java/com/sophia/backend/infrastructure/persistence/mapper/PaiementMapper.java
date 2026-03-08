@@ -8,20 +8,20 @@ import org.springframework.stereotype.Component;
 public class PaiementMapper {
     public PaiementDTO toDto(Paiement p) {
         if (p == null) return null;
-        return new PaiementDTO(
-                p.getId(),
-                p.getInscriptionId(),
-                p.getTypePaiement() != null ? p.getTypePaiement().name() : null,
-                p.getReferenceId(),
-                p.getMontant(),
-                p.getDatePaiement(),
-                p.getModePaiement() != null ? p.getModePaiement().name() : null,
-                p.getRecuPath(),
-                p.getCommentaire(),
-                p.getUtilisateurId(),
-                p.getCreatedAt(),
-                p.getUpdatedAt()
-        );
+        PaiementDTO dto = new PaiementDTO();
+        dto.setId(p.getId());
+        dto.setInscriptionId(p.getInscriptionId());
+        dto.setTypePaiement(p.getTypePaiement() != null ? p.getTypePaiement().name() : null);
+        dto.setReferenceId(p.getReferenceId());
+        dto.setMontant(p.getMontant());
+        dto.setDatePaiement(p.getDatePaiement());
+        dto.setModePaiement(p.getModePaiement() != null ? p.getModePaiement().name() : null);
+        dto.setRecuPath(p.getRecuPath());
+        dto.setCommentaire(p.getCommentaire());
+        dto.setUtilisateurId(p.getUtilisateurId());
+        dto.setCreatedAt(p.getCreatedAt());
+        dto.setUpdatedAt(p.getUpdatedAt());
+        return dto;
     }
 
     public Paiement toDomain(PaiementDTO d) {
@@ -35,8 +35,7 @@ public class PaiementMapper {
         p.setRecuPath(d.getRecuPath());
         p.setCommentaire(d.getCommentaire());
         p.setUtilisateurId(d.getUtilisateurId());
-        p.setCreatedAt(d.getCreatedAt());
-        p.setUpdatedAt(d.getUpdatedAt());
+        // Ne pas mapper createdAt, updatedAt (READ_ONLY)
         return p;
     }
 }

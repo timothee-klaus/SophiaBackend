@@ -10,27 +10,27 @@ import org.springframework.stereotype.Component;
 public class EleveMapper {
     public EleveDTO toDto(Eleve e) {
         if (e == null) return null;
-        return new EleveDTO(
-                e.getId(),
-                e.getMatricule(),
-                e.getNom(),
-                e.getPrenom(),
-                e.getDateNaissance(),
-                e.getLieuNaissance(),
-                e.getSexe() != null ? e.getSexe().name() : null,
-                e.getNationalite(),
-                e.getAdresse(),
-                e.getNomTuteur(),
-                e.getTelephoneTuteur(),
-                e.getEmailTuteur(),
-                e.getPhotoPath(),
-                e.getActeNaissancePath(),
-                e.getEtablissementId(),
-                e.getStatutDossier() != null ? e.getStatutDossier().name() : null,
-                e.getDateCreationDossier(),
-                e.getCreatedAt(),
-                e.getUpdatedAt()
-        );
+        EleveDTO dto = new EleveDTO();
+        dto.setId(e.getId());
+        dto.setMatricule(e.getMatricule());
+        dto.setNom(e.getNom());
+        dto.setPrenom(e.getPrenom());
+        dto.setDateNaissance(e.getDateNaissance());
+        dto.setLieuNaissance(e.getLieuNaissance());
+        dto.setSexe(e.getSexe() != null ? e.getSexe().name() : null);
+        dto.setNationalite(e.getNationalite());
+        dto.setAdresse(e.getAdresse());
+        dto.setNomTuteur(e.getNomTuteur());
+        dto.setTelephoneTuteur(e.getTelephoneTuteur());
+        dto.setEmailTuteur(e.getEmailTuteur());
+        dto.setPhotoPath(e.getPhotoPath());
+        dto.setActeNaissancePath(e.getActeNaissancePath());
+        dto.setEtablissementId(e.getEtablissementId());
+        dto.setStatutDossier(e.getStatutDossier() != null ? e.getStatutDossier().name() : null);
+        dto.setDateCreationDossier(e.getDateCreationDossier());
+        dto.setCreatedAt(e.getCreatedAt());
+        dto.setUpdatedAt(e.getUpdatedAt());
+        return dto;
     }
 
     public Eleve toDomain(EleveDTO d) {
@@ -42,7 +42,6 @@ public class EleveMapper {
         e.setPrenom(d.getPrenom());
         e.setDateNaissance(d.getDateNaissance());
         e.setLieuNaissance(d.getLieuNaissance());
-        // convertir les enums sexe et statutDossier depuis leurs représentations String
         if (d.getSexe() != null) {
             try {
                 e.setSexe(Sexe.valueOf(d.getSexe()));
@@ -66,8 +65,7 @@ public class EleveMapper {
         e.setActeNaissancePath(d.getActeNaissancePath());
         e.setEtablissementId(d.getEtablissementId());
         e.setDateCreationDossier(d.getDateCreationDossier());
-        e.setCreatedAt(d.getCreatedAt());
-        e.setUpdatedAt(d.getUpdatedAt());
+        // Ne pas mapper createdAt, updatedAt (READ_ONLY)
         return e;
     }
 }

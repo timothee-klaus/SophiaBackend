@@ -3,17 +3,18 @@ package com.sophia.backend.infrastructure.persistence.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "frais_inscription")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FraisInscriptionEntity {
+@EqualsAndHashCode(callSuper = true)
+public class FraisInscriptionEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,6 +23,5 @@ public class FraisInscriptionEntity {
     private Long niveauId;
     private Long anneeScolaireId;
     private BigDecimal montant;
-    private LocalDateTime createdAt;
 }
 

@@ -17,4 +17,5 @@ public class FraisDivers {
     private BigDecimal montant;
     private Long anneeScolaireId;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

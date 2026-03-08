@@ -2,17 +2,17 @@ package com.sophia.backend.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccesEtablissementDTO {
+@EqualsAndHashCode(callSuper = true)
+public class AccesEtablissementDTO extends BaseDTO {
     private Long id;
     private UUID utilisateurId;
     private Long etablissementId;
-    private LocalDateTime createdAt;
 }

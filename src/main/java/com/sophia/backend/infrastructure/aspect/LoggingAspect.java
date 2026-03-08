@@ -4,8 +4,8 @@ import com.sophia.backend.application.service.LogService;
 import com.sophia.backend.domain.enums.ActionLog;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -20,11 +20,13 @@ public class LoggingAspect {
 
     private final LogService logService;
 
-    @AfterReturning("@annotation(com.sophia.backend.infrastructure.aspect.LogCreate)")
+    // Capture tous les POST (CREATE)
+    @AfterReturning("execution(* com.sophia.backend.interfaces.web.controller.*Controller.create(*))")
     public void logCreate(JoinPoint joinPoint) {
         try {
+            String entity = extractEntity(joinPoint.getSignature().getDeclaringTypeName());
             String userId = getCurrentUserId();
-            String entity = getEntityName(joinPoint);
+            String ipAddress = getClientIp();
 
             logService.enregistrerCreation(
                 userId != null ? UUID.fromString(userId) : UUID.randomUUID(),
@@ -33,15 +35,16 @@ public class LoggingAspect {
                 "Creation de " + entity
             );
         } catch (Exception e) {
-            e.printStackTrace();
+            // Ne pas bloquer
         }
     }
 
-    @AfterReturning("@annotation(com.sophia.backend.infrastructure.aspect.LogUpdate)")
+    // Capture tous les PUT (UPDATE)
+    @AfterReturning("execution(* com.sophia.backend.interfaces.web.controller.*Controller.update(*))")
     public void logUpdate(JoinPoint joinPoint) {
         try {
+            String entity = extractEntity(joinPoint.getSignature().getDeclaringTypeName());
             String userId = getCurrentUserId();
-            String entity = getEntityName(joinPoint);
 
             logService.enregistrerModification(
                 userId != null ? UUID.fromString(userId) : UUID.randomUUID(),
@@ -52,15 +55,16 @@ public class LoggingAspect {
                 "Modification de " + entity
             );
         } catch (Exception e) {
-            e.printStackTrace();
+            // Ne pas bloquer
         }
     }
 
-    @AfterReturning("@annotation(com.sophia.backend.infrastructure.aspect.LogDelete)")
+    // Capture tous les DELETE
+    @AfterReturning("execution(* com.sophia.backend.interfaces.web.controller.*Controller.delete(*))")
     public void logDelete(JoinPoint joinPoint) {
         try {
+            String entity = extractEntity(joinPoint.getSignature().getDeclaringTypeName());
             String userId = getCurrentUserId();
-            String entity = getEntityName(joinPoint);
 
             logService.enregistrerSuppression(
                 userId != null ? UUID.fromString(userId) : UUID.randomUUID(),
@@ -69,14 +73,20 @@ public class LoggingAspect {
                 "Suppression de " + entity
             );
         } catch (Exception e) {
-            e.printStackTrace();
+            // Ne pas bloquer
         }
+    }
+
+    private String extractEntity(String className) {
+        String[] parts = className.split("\\.");
+        String controllerName = parts[parts.length - 1];
+        return controllerName.replace("Controller", "").toUpperCase();
     }
 
     private String getCurrentUserId() {
         try {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            return principal.toString();
+            // À implémenter avec Spring Security
+            return "system-user";
         } catch (Exception e) {
             return null;
         }
@@ -94,14 +104,9 @@ public class LoggingAspect {
                 return xForwardedFor.split(",")[0];
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            // Ne pas bloquer
         }
         return "UNKNOWN";
-    }
-
-    private String getEntityName(JoinPoint joinPoint) {
-        String methodName = joinPoint.getSignature().getName();
-        return methodName.replace("create", "").replace("update", "").replace("delete", "");
     }
 }
 

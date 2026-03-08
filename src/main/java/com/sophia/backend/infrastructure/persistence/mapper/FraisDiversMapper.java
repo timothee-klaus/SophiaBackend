@@ -9,7 +9,15 @@ import org.springframework.stereotype.Component;
 public class FraisDiversMapper {
     public FraisDiversDTO toDto(FraisDivers f) {
         if (f == null) return null;
-        return new FraisDiversDTO(f.getId(), f.getNiveauId(), f.getLibelle(), f.getMontant(), f.getAnneeScolaireId(), f.getCreatedAt());
+        FraisDiversDTO dto = new FraisDiversDTO();
+        dto.setId(f.getId());
+        dto.setNiveauId(f.getNiveauId());
+        dto.setLibelle(f.getLibelle());
+        dto.setMontant(f.getMontant());
+        dto.setAnneeScolaireId(f.getAnneeScolaireId());
+        dto.setCreatedAt(f.getCreatedAt());
+        dto.setUpdatedAt(f.getUpdatedAt());
+        return dto;
     }
 
     public FraisDivers toDomain(FraisDiversDTO d) {
@@ -20,7 +28,7 @@ public class FraisDiversMapper {
         f.setLibelle(d.getLibelle());
         f.setMontant(d.getMontant());
         f.setAnneeScolaireId(d.getAnneeScolaireId());
-        f.setCreatedAt(d.getCreatedAt());
+        // Ne pas mapper createdAt, updatedAt (READ_ONLY)
         return f;
     }
 
@@ -33,6 +41,7 @@ public class FraisDiversMapper {
         f.setMontant(e.getMontant());
         f.setAnneeScolaireId(e.getAnneeScolaireId());
         f.setCreatedAt(e.getCreatedAt());
+        f.setUpdatedAt(e.getUpdatedAt());
         return f;
     }
 
@@ -45,7 +54,7 @@ public class FraisDiversMapper {
         e.setMontant(f.getMontant());
         e.setAnneeScolaireId(f.getAnneeScolaireId());
         e.setCreatedAt(f.getCreatedAt());
+        e.setUpdatedAt(f.getUpdatedAt());
         return e;
     }
 }
-

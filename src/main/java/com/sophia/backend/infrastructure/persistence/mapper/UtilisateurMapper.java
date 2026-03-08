@@ -9,14 +9,22 @@ import org.springframework.stereotype.Component;
 public class UtilisateurMapper {
     public UtilisateurDTO toDto(Utilisateur u) {
         if (u == null) return null;
-        // utiliser UUID du domaine (champ 'uuid') comme identifiant externe
-        return new UtilisateurDTO(u.getUuid(), u.getNom(), u.getEmail(), u.getRole() != null ? u.getRole().name() : null, u.getTelephone(), u.isEstActif(), u.getLastLogin(), u.getCreatedAt(), u.getUpdatedAt());
+        UtilisateurDTO dto = new UtilisateurDTO();
+        dto.setId(u.getUuid());
+        dto.setNom(u.getNom());
+        dto.setEmail(u.getEmail());
+        dto.setRole(u.getRole() != null ? u.getRole().name() : null);
+        dto.setTelephone(u.getTelephone());
+        dto.setEstActif(u.isEstActif());
+        dto.setLastLogin(u.getLastLogin());
+        dto.setCreatedAt(u.getCreatedAt());
+        dto.setUpdatedAt(u.getUpdatedAt());
+        return dto;
     }
 
     public Utilisateur toDomain(UtilisateurDTO d) {
         if (d == null) return null;
         Utilisateur u = new Utilisateur();
-        // mapper l'UUID du DTO vers le champ uuid du domaine
         u.setUuid(d.getId());
         u.setNom(d.getNom());
         u.setEmail(d.getEmail());
@@ -25,9 +33,7 @@ public class UtilisateurMapper {
         }
         u.setTelephone(d.getTelephone());
         u.setEstActif(d.isEstActif());
-        u.setLastLogin(d.getLastLogin());
-        u.setCreatedAt(d.getCreatedAt());
-        u.setUpdatedAt(d.getUpdatedAt());
+        // Ne pas mapper lastLogin, createdAt, updatedAt (READ_ONLY)
         return u;
     }
 }

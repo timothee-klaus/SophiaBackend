@@ -25,7 +25,16 @@ public class NiveauController {
     private final NiveauService service;
     private final NiveauMapper mapper;
 
-    @Operation(summary = "Lister tous les niveaux", description = "Retourne tous les niveaux scolaires")
+    @Operation(summary = "Créer un niveau", description = "Crée une nouvelle classe/niveau (ex: 6ème, CM2, Jardin d'enfants)")
+    @ApiResponse(responseCode = "201", description = "Niveau créé avec succès")
+    @PostMapping
+    public ResponseEntity<NiveauDTO> create(@RequestBody NiveauDTO dto) {
+        Niveau niveau = mapper.toDomain(dto);
+        Niveau saved = service.create(niveau);
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
+    }
+
+    @Operation(summary = "Lister les niveaux", description = "Retourne la liste de tous les niveaux")
     @GetMapping
     public ResponseEntity<List<NiveauDTO>> getAll() {
         List<NiveauDTO> dtos = service.findAll().stream()
@@ -34,15 +43,7 @@ public class NiveauController {
         return ResponseEntity.ok(dtos);
     }
 
-    @Operation(summary = "Recuperer un niveau par ID", description = "Retourne les details d'un niveau")
-    @GetMapping("/{id}")
-    public ResponseEntity<NiveauDTO> getById(@Parameter(description = "ID du niveau") @PathVariable Long id) {
-        return service.findById(id)
-                .map(n -> ResponseEntity.ok(mapper.toDto(n)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @Operation(summary = "Niveaux par cycle", description = "Liste tous les niveaux d'un cycle (ex: tous les niveaux du College)")
+    @Operation(summary = "Lister niveaux d'un cycle", description = "Retourne les niveaux associés à un cycle spécifique")
     @GetMapping("/cycle/{cycleId}")
     public ResponseEntity<List<NiveauDTO>> getByCycleId(@Parameter(description = "ID du cycle") @PathVariable Long cycleId) {
         List<NiveauDTO> dtos = service.findByCycleId(cycleId).stream()
@@ -51,22 +52,24 @@ public class NiveauController {
         return ResponseEntity.ok(dtos);
     }
 
-    @Operation(summary = "Niveaux par etablissement", description = "Liste tous les niveaux proposes par un etablissement")
-    @GetMapping("/etablissement/{etablissementId}")
-    public ResponseEntity<List<NiveauDTO>> getByEtablissementId(@Parameter(description = "ID de l'etablissement") @PathVariable Long etablissementId) {
-        List<NiveauDTO> dtos = service.findByEtablissementId(etablissementId).stream()
+    @Operation(summary = "Lister niveaux d'un établissement", description = "Retourne les niveaux d'un établissement spécifique")
+    @GetMapping("/etablissement/{etabId}")
+    public ResponseEntity<List<NiveauDTO>> getByEtablissementId(@Parameter(description = "ID de l'etablissement") @PathVariable Long etabId) {
+        List<NiveauDTO> dtos = service.findByEtablissementId(etabId).stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
 
-    @PostMapping
-    public ResponseEntity<NiveauDTO> create(@RequestBody NiveauDTO dto) {
-        Niveau niveau = mapper.toDomain(dto);
-        Niveau saved = service.create(niveau);
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
+    @Operation(summary = "Récupérer un niveau", description = "Retourne les détails d'un niveau spécifique")
+    @GetMapping("/{id}")
+    public ResponseEntity<NiveauDTO> getById(@Parameter(description = "ID du niveau") @PathVariable Long id) {
+        return service.findById(id)
+                .map(n -> ResponseEntity.ok(mapper.toDto(n)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Modifier un niveau", description = "Modifie les informations d'un niveau")
     @PutMapping("/{id}")
     public ResponseEntity<NiveauDTO> update(@PathVariable Long id, @RequestBody NiveauDTO dto) {
         Niveau niveau = mapper.toDomain(dto);
@@ -74,21 +77,10 @@ public class NiveauController {
         return ResponseEntity.ok(mapper.toDto(updated));
     }
 
+    @Operation(summary = "Supprimer un niveau", description = "Supprime un niveau du système")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/configurer")
-    public ResponseEntity<List<NiveauDTO>> configurerNiveauxEtablissement(
-            @RequestParam Long etablissementId,
-            @RequestParam Long cycleId) {
-        List<NiveauDTO> dtos = service.configurerNiveauxEtablissement(etablissementId, cycleId).stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
-    }
 }
-
-

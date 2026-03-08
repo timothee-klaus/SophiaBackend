@@ -9,7 +9,13 @@ import org.springframework.stereotype.Component;
 public class AccesEtablissementMapper {
     public AccesEtablissementDTO toDto(AccesEtablissement a) {
         if (a == null) return null;
-        return new AccesEtablissementDTO(a.getId(), a.getUtilisateurId(), a.getEtablissementId(), a.getCreatedAt());
+        AccesEtablissementDTO dto = new AccesEtablissementDTO();
+        dto.setId(a.getId());
+        dto.setUtilisateurId(a.getUtilisateurId());
+        dto.setEtablissementId(a.getEtablissementId());
+        dto.setCreatedAt(a.getCreatedAt());
+        dto.setUpdatedAt(a.getUpdatedAt());
+        return dto;
     }
 
     public AccesEtablissement toDomain(AccesEtablissementDTO d) {
@@ -18,7 +24,7 @@ public class AccesEtablissementMapper {
         a.setId(d.getId());
         a.setUtilisateurId(d.getUtilisateurId());
         a.setEtablissementId(d.getEtablissementId());
-        a.setCreatedAt(d.getCreatedAt());
+        // Ne pas mapper createdAt, updatedAt (READ_ONLY)
         return a;
     }
 
@@ -29,8 +35,18 @@ public class AccesEtablissementMapper {
         a.setUtilisateurId(e.getUtilisateurId());
         a.setEtablissementId(e.getEtablissementId());
         a.setCreatedAt(e.getCreatedAt());
+        a.setUpdatedAt(e.getUpdatedAt());
         return a;
     }
+
+    public AccesEtablissementEntity toEntity(AccesEtablissement a) {
+        if (a == null) return null;
+        AccesEtablissementEntity e = new AccesEtablissementEntity();
+        e.setId(a.getId());
+        e.setUtilisateurId(a.getUtilisateurId());
+        e.setEtablissementId(a.getEtablissementId());
+        e.setCreatedAt(a.getCreatedAt());
+        e.setUpdatedAt(a.getUpdatedAt());
+        return e;
+    }
 }
-
-

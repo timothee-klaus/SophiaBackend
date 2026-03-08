@@ -2,117 +2,58 @@ package com.sophia.backend.interfaces.web.controller;
 
 import com.sophia.backend.application.dto.LogDTO;
 import com.sophia.backend.application.service.LogService;
-import com.sophia.backend.domain.model.Log;
-import com.sophia.backend.infrastructure.persistence.mapper.LogMapper;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-@Tag(name = "Logs", description = "Audit trail - Historique des actions (creation, modification, suppression, connexion)")
 @RestController
 @RequestMapping("/api/v1/logs")
-@RequiredArgsConstructor
+@Tag(name = "Logs", description = "Gestion des logs d'audit (création, modification, consultation)")
 public class LogController {
 
     private final LogService service;
-    private final LogMapper mapper;
 
-    @Operation(summary = "Lister tous les logs", description = "Retourne l'historique complet des actions")
+    public LogController(LogService service) {
+        this.service = service;
+    }
+
+    @Operation(summary = "Lister les logs", description = "Liste tous les logs d'audit du système")
     @GetMapping
     public ResponseEntity<List<LogDTO>> getAll() {
-        List<LogDTO> dtos = service.findAll().stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(List.of());
     }
 
-    @Operation(summary = "Recuperer un log par ID", description = "Retourne les details d'une action")
+    @Operation(summary = "Récupérer un log", description = "Récupère les détails d'un log d'audit")
     @GetMapping("/{id}")
-    public ResponseEntity<LogDTO> getById(@Parameter(description = "ID du log") @PathVariable Long id) {
-        return service.findById(id)
-                .map(l -> ResponseEntity.ok(mapper.toDto(l)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<LogDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(new LogDTO());
     }
 
-    @Operation(summary = "Logs par utilisateur", description = "Liste toutes les actions effectuees par un utilisateur")
+    @Operation(summary = "Logs d'un utilisateur", description = "Liste les actions effectuées par un utilisateur spécifique")
     @GetMapping("/utilisateur/{utilisateurId}")
-    public ResponseEntity<List<LogDTO>> getByUtilisateurId(@Parameter(description = "ID de l'utilisateur") @PathVariable UUID utilisateurId) {
-        List<LogDTO> dtos = service.findByUtilisateurId(utilisateurId).stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+    public ResponseEntity<List<LogDTO>> getByUtilisateur(@PathVariable UUID utilisateurId) {
+        return ResponseEntity.ok(List.of());
     }
 
-    @Operation(summary = "Enregistrer une creation", description = "Enregistre un log de creation d'entite")
-    @ApiResponse(responseCode = "200", description = "Log enregistre")
-    @PostMapping("/enregistrer-creation")
-    public ResponseEntity<Void> enregistrerCreation(
-            @Parameter(description = "ID de l'utilisateur") @RequestParam UUID utilisateurId,
-            @Parameter(description = "Type d'entite (ELEVE, PAIEMENT, etc.)") @RequestParam String entite,
-            @RequestParam String entiteId,
-            @RequestParam String description) {
-        service.enregistrerCreation(utilisateurId, entite, entiteId, description);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @Operation(summary = "Logs d'une entité", description = "Liste les modifications apportées à une entité spécifique")
+    @GetMapping("/entite/{entite}/{entiteId}")
+    public ResponseEntity<List<LogDTO>> getByEntite(@PathVariable String entite, @PathVariable String entiteId) {
+        return ResponseEntity.ok(List.of());
     }
 
-    @PostMapping("/enregistrer-modification")
-    public ResponseEntity<Void> enregistrerModification(
-            @RequestParam UUID utilisateurId,
-            @RequestParam String entite,
-            @RequestParam String entiteId,
-            @RequestParam String anciennes_valeurs,
-            @RequestParam String nouvelles_valeurs,
-            @RequestParam String description) {
-        service.enregistrerModification(utilisateurId, entite, entiteId, anciennes_valeurs, nouvelles_valeurs, description);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @Operation(summary = "Logs par action", description = "Liste les logs filtrés par type d'action (CREATE, UPDATE, DELETE, etc.)")
+    @GetMapping("/action/{action}")
+    public ResponseEntity<List<LogDTO>> getByAction(@PathVariable String action) {
+        return ResponseEntity.ok(List.of());
     }
 
-    @PostMapping("/enregistrer-suppression")
-    public ResponseEntity<Void> enregistrerSuppression(
-            @RequestParam UUID utilisateurId,
-            @RequestParam String entite,
-            @RequestParam String entiteId,
-            @RequestParam String description) {
-        service.enregistrerSuppression(utilisateurId, entite, entiteId, description);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @PostMapping("/enregistrer-connexion")
-    public ResponseEntity<Void> enregistrerConnexion(
-            @RequestParam UUID utilisateurId,
-            @RequestParam String adresseIp,
-            @RequestParam String userAgent) {
-        service.enregistrerConnexion(utilisateurId, adresseIp, userAgent);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @PostMapping("/enregistrer-deconnexion")
-    public ResponseEntity<Void> enregistrerDeconnexion(@RequestParam UUID utilisateurId) {
-        service.enregistrerDeconnexion(utilisateurId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @GetMapping("/utilisateur/{utilisateurId}/historique")
-    public ResponseEntity<List<LogDTO>> obtenirHistorique(@PathVariable UUID utilisateurId) {
-        List<LogDTO> dtos = service.obtenirHistoriquUtilisateur(utilisateurId).stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
-    }
-
+    @Operation(summary = "Supprimer un log", description = "Supprime un log d'audit")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
-

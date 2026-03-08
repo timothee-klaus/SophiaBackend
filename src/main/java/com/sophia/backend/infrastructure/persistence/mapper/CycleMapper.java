@@ -9,7 +9,14 @@ import org.springframework.stereotype.Component;
 public class CycleMapper {
     public CycleDTO toDto(Cycle c) {
         if (c == null) return null;
-        return new CycleDTO(c.getId(), c.getNom(), c.getDescription(), c.getOrdre(), c.getCreatedAt());
+        CycleDTO dto = new CycleDTO();
+        dto.setId(c.getId());
+        dto.setNom(c.getNom());
+        dto.setDescription(c.getDescription());
+        dto.setOrdre(c.getOrdre());
+        dto.setCreatedAt(c.getCreatedAt());
+        dto.setUpdatedAt(c.getUpdatedAt());
+        return dto;
     }
 
     public Cycle toDomain(CycleDTO d) {
@@ -19,7 +26,7 @@ public class CycleMapper {
         c.setNom(d.getNom());
         c.setDescription(d.getDescription());
         c.setOrdre(d.getOrdre());
-        c.setCreatedAt(d.getCreatedAt());
+        // Ne pas mapper createdAt, updatedAt (READ_ONLY)
         return c;
     }
 
@@ -31,6 +38,7 @@ public class CycleMapper {
         c.setDescription(e.getDescription());
         c.setOrdre(e.getOrdre());
         c.setCreatedAt(e.getCreatedAt());
+        c.setUpdatedAt(e.getUpdatedAt());
         return c;
     }
 
@@ -42,7 +50,7 @@ public class CycleMapper {
         e.setDescription(c.getDescription());
         e.setOrdre(c.getOrdre());
         e.setCreatedAt(c.getCreatedAt());
+        e.setUpdatedAt(c.getUpdatedAt());
         return e;
     }
 }
-

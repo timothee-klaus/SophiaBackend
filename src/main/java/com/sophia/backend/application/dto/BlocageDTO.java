@@ -2,6 +2,7 @@ package com.sophia.backend.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -11,7 +12,8 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BlocageDTO {
+@EqualsAndHashCode(callSuper = true)
+public class BlocageDTO extends BaseDTO {
     private Long id;
     private Long inscriptionId;
     private String typeBlocage;
@@ -21,5 +23,4 @@ public class BlocageDTO {
     private boolean estActif;
     private UUID levePar;
     private LocalDateTime dateLevee;
-    private LocalDateTime createdAt;
 }

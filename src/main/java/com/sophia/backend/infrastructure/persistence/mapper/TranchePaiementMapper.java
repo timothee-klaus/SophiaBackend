@@ -9,7 +9,17 @@ import org.springframework.stereotype.Component;
 public class TranchePaiementMapper {
     public TranchePaiementDTO toDto(TranchePaiement t) {
         if (t == null) return null;
-        return new TranchePaiementDTO(t.getId(), t.getFraisScolaireId(), t.getNomTranche(), t.getMontant(), t.getDateLimiteDebut(), t.getDateLimiteFin(), t.getOrdre(), t.getCreatedAt());
+        TranchePaiementDTO dto = new TranchePaiementDTO();
+        dto.setId(t.getId());
+        dto.setFraisScolaireId(t.getFraisScolaireId());
+        dto.setNomTranche(t.getNomTranche());
+        dto.setMontant(t.getMontant());
+        dto.setDateLimiteDebut(t.getDateLimiteDebut());
+        dto.setDateLimiteFin(t.getDateLimiteFin());
+        dto.setOrdre(t.getOrdre());
+        dto.setCreatedAt(t.getCreatedAt());
+        dto.setUpdatedAt(t.getUpdatedAt());
+        return dto;
     }
 
     public TranchePaiement toDomain(TranchePaiementDTO d) {
@@ -22,7 +32,7 @@ public class TranchePaiementMapper {
         t.setDateLimiteDebut(d.getDateLimiteDebut());
         t.setDateLimiteFin(d.getDateLimiteFin());
         t.setOrdre(d.getOrdre());
-        t.setCreatedAt(d.getCreatedAt());
+        // Ne pas mapper createdAt, updatedAt (READ_ONLY)
         return t;
     }
 
@@ -37,6 +47,7 @@ public class TranchePaiementMapper {
         t.setDateLimiteFin(e.getDateLimiteFin());
         t.setOrdre(e.getOrdre());
         t.setCreatedAt(e.getCreatedAt());
+        t.setUpdatedAt(e.getUpdatedAt());
         return t;
     }
 
@@ -51,7 +62,7 @@ public class TranchePaiementMapper {
         e.setDateLimiteFin(t.getDateLimiteFin());
         e.setOrdre(t.getOrdre());
         e.setCreatedAt(t.getCreatedAt());
+        e.setUpdatedAt(t.getUpdatedAt());
         return e;
     }
 }
-

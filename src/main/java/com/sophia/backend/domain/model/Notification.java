@@ -21,4 +21,5 @@ public class Notification {
     private LocalDateTime dateCreation;
     private String lien;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

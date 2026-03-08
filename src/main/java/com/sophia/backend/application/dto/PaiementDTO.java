@@ -2,6 +2,7 @@ package com.sophia.backend.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -11,7 +12,8 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaiementDTO {
+@EqualsAndHashCode(callSuper = true)
+public class PaiementDTO extends BaseDTO {
     private Long id;
     private Long inscriptionId;
     private String typePaiement;
@@ -22,6 +24,4 @@ public class PaiementDTO {
     private String recuPath;
     private String commentaire;
     private UUID utilisateurId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

@@ -5,6 +5,7 @@ import com.sophia.backend.domain.enums.ActionLog;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -17,7 +18,8 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LogEntity {
+@EqualsAndHashCode(callSuper = true)
+public class LogEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,7 +40,7 @@ public class LogEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode nouvellesValeurs;
 
-    private String ipAdresse;
+    private String adresseIp;
     private String userAgent;
     private LocalDateTime dateAction;
     private String description;
