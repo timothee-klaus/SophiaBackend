@@ -4,12 +4,12 @@ import com.sophia.backend.domain.model.Paiement;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface PaiementRepository {
-    Optional<Paiement> findById(Long id);
+    Optional<Paiement> findByUuid(UUID uuid);
     List<Paiement> findAll();
-    List<Paiement> findByInscriptionId(Long inscriptionId);
+    List<Paiement> findByInscriptionUuid(UUID inscriptionUuid);
     Paiement save(Paiement paiement);
-    void deleteById(Long id);
+    void deleteByUuid(UUID uuid);
 }
-

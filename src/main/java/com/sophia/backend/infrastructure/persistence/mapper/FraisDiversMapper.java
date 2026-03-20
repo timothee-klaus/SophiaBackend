@@ -10,11 +10,11 @@ public class FraisDiversMapper {
     public FraisDiversDTO toDto(FraisDivers f) {
         if (f == null) return null;
         FraisDiversDTO dto = new FraisDiversDTO();
-        dto.setId(f.getId());
-        dto.setNiveauId(f.getNiveauId());
-        dto.setLibelle(f.getLibelle());
+        dto.setUuid(f.getUuid());
+        dto.setNiveauUuid(f.getNiveauUuid());
+        dto.setDescription(f.getDescription());
         dto.setMontant(f.getMontant());
-        dto.setAnneeScolaireId(f.getAnneeScolaireId());
+        dto.setAnneeScolaireUuid(f.getAnneeScolaireUuid());
         dto.setCreatedAt(f.getCreatedAt());
         dto.setUpdatedAt(f.getUpdatedAt());
         return dto;
@@ -23,12 +23,13 @@ public class FraisDiversMapper {
     public FraisDivers toDomain(FraisDiversDTO d) {
         if (d == null) return null;
         FraisDivers f = new FraisDivers();
-        f.setId(d.getId());
-        f.setNiveauId(d.getNiveauId());
-        f.setLibelle(d.getLibelle());
+        f.setUuid(d.getUuid());
+        f.setNiveauUuid(d.getNiveauUuid());
+        f.setDescription(d.getDescription());
         f.setMontant(d.getMontant());
-        f.setAnneeScolaireId(d.getAnneeScolaireId());
-        // Ne pas mapper createdAt, updatedAt (READ_ONLY)
+        f.setAnneeScolaireUuid(d.getAnneeScolaireUuid());
+        f.setCreatedAt(d.getCreatedAt());
+        f.setUpdatedAt(d.getUpdatedAt());
         return f;
     }
 
@@ -36,10 +37,13 @@ public class FraisDiversMapper {
         if (e == null) return null;
         FraisDivers f = new FraisDivers();
         f.setId(e.getId());
+        f.setUuid(e.getUuid());
         f.setNiveauId(e.getNiveauId());
-        f.setLibelle(e.getLibelle());
+        f.setNiveauUuid(e.getNiveauUuid());
+        f.setDescription(e.getDescription());
         f.setMontant(e.getMontant());
         f.setAnneeScolaireId(e.getAnneeScolaireId());
+        f.setAnneeScolaireUuid(e.getAnneeScolaireUuid());
         f.setCreatedAt(e.getCreatedAt());
         f.setUpdatedAt(e.getUpdatedAt());
         return f;
@@ -49,10 +53,13 @@ public class FraisDiversMapper {
         if (f == null) return null;
         FraisDiversEntity e = new FraisDiversEntity();
         e.setId(f.getId());
+        e.setUuid(f.getUuid());
         e.setNiveauId(f.getNiveauId());
-        e.setLibelle(f.getLibelle());
+        e.setNiveauUuid(f.getNiveauUuid());
+        e.setDescription(f.getDescription());
         e.setMontant(f.getMontant());
         e.setAnneeScolaireId(f.getAnneeScolaireId());
+        e.setAnneeScolaireUuid(f.getAnneeScolaireUuid());
         e.setCreatedAt(f.getCreatedAt());
         e.setUpdatedAt(f.getUpdatedAt());
         return e;

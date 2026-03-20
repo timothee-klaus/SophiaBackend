@@ -1,12 +1,15 @@
 package com.sophia.backend.application.service;
+import com.sophia.backend.domain.enums.ActionLog;
 import com.sophia.backend.domain.model.Log;
 import com.sophia.backend.domain.repository.LogRepository;
-import com.sophia.backend.domain.enums.ActionLog;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 @Service
+@Transactional
 public class LogService {
     private final LogRepository logRepository;
     public LogService(LogRepository logRepository) {
@@ -15,63 +18,80 @@ public class LogService {
     public Optional<Log> findById(Long id) {
         return logRepository.findById(id);
     }
+
+    public Optional<Log> findByUuid(UUID uuid) {
+        return logRepository.findByUuid(uuid);
+    }
+
     public List<Log> findAll() {
         return logRepository.findAll();
     }
-    public List<Log> findByUtilisateurId(UUID utilisateurId) {
-        return logRepository.findByUtilisateurId(utilisateurId);
+
+    public List<Log> findByUtilisateurId(UUID utilisateurUuid) {
+        return logRepository.findByUtilisateurId(utilisateurUuid);
     }
+
+    public List<Log> findByEntite(String entite) {
+        return logRepository.findByEntite(entite);
+    }
+
+    public List<Log> findByEntiteAndEntiteId(String entite, String entiteId) {
+        return logRepository.findByEntiteAndEntiteId(entite, entiteId);
+    }
+
+    public List<Log> findByAction(ActionLog action) {
+        return logRepository.findByAction(action);
+    }
+
     public Log create(Log log) {
+        if (log.getUuid() == null) {
+            log.setUuid(UUID.randomUUID());
+        }
         return logRepository.save(log);
     }
-    public void delete(Long id) {
-        logRepository.deleteById(id);
+
+    public void deleteByUuid(UUID uuid) {
+        logRepository.deleteByUuid(uuid);
     }
-    public void enregistrerCreation(UUID utilisateurId, String entite, String entiteId, String description) {
+
+    public void enregistrerCreation(String entite, String entiteId, String description) {
         Log log = new Log();
-        log.setUtilisateurId(utilisateurId);
         log.setAction(ActionLog.CREATE);
         log.setEntite(entite);
         log.setEntiteId(entiteId);
         log.setDescription(description);
         this.create(log);
     }
-    public void enregistrerModification(UUID utilisateurId, String entite, String entiteId, 
+
+    public void enregistrerModification(String entite, String entiteId,
                                        String anciennes_valeurs, String nouvelles_valeurs, String description) {
         Log log = new Log();
-        log.setUtilisateurId(utilisateurId);
         log.setAction(ActionLog.UPDATE);
         log.setEntite(entite);
         log.setEntiteId(entiteId);
         log.setDescription(description);
         this.create(log);
     }
-    public void enregistrerSuppression(UUID utilisateurId, String entite, String entiteId, String description) {
+
+    public void enregistrerSuppression(String entite, String entiteId, String description) {
         Log log = new Log();
-        log.setUtilisateurId(utilisateurId);
         log.setAction(ActionLog.DELETE);
         log.setEntite(entite);
         log.setEntiteId(entiteId);
         log.setDescription(description);
         this.create(log);
     }
-    public void enregistrerConnexion(UUID utilisateurId, String adresseIp, String userAgent) {
+    public void enregistrerConnexion(String description) {
         Log log = new Log();
-        log.setUtilisateurId(utilisateurId);
         log.setAction(ActionLog.LOGIN);
-        log.setDescription("Connexion utilisateur");
-        log.setAdresseIp(adresseIp);
-        log.setUserAgent(userAgent);
+        log.setDescription(description);
         this.create(log);
     }
-    public void enregistrerDeconnexion(UUID utilisateurId) {
+
+    public void enregistrerDeconnexion(String description) {
         Log log = new Log();
-        log.setUtilisateurId(utilisateurId);
         log.setAction(ActionLog.LOGOUT);
-        log.setDescription("Déconnexion utilisateur");
+        log.setDescription(description);
         this.create(log);
-    }
-    public List<Log> obtenirHistoriquUtilisateur(UUID utilisateurId) {
-        return this.findByUtilisateurId(utilisateurId);
     }
 }

@@ -4,12 +4,15 @@ import com.sophia.backend.domain.model.Inscription;
 import com.sophia.backend.domain.repository.InscriptionRepository;
 import com.sophia.backend.domain.enums.StatutInscription;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class InscriptionService {
     private final InscriptionRepository inscriptionRepository;
 
@@ -17,75 +20,57 @@ public class InscriptionService {
         this.inscriptionRepository = inscriptionRepository;
     }
 
-    public Optional<Inscription> findById(Long id) {
-        return inscriptionRepository.findById(id);
+    public Optional<Inscription> findByUuid(UUID uuid) {
+        return inscriptionRepository.findByUuid(uuid);
     }
 
     public List<Inscription> findAll() {
         return inscriptionRepository.findAll();
     }
 
-    public List<Inscription> findByEleveId(UUID eleveId) {
-        return inscriptionRepository.findByEleveId(eleveId);
+    public List<Inscription> findByEleveUuid(UUID eleveUuid) {
+        return inscriptionRepository.findByEleveUuid(eleveUuid);
     }
 
-    public Inscription create(Inscription inscription) {
-        return inscriptionRepository.save(inscription);
+    public List<Inscription> findByNiveauUuid(UUID niveauUuid) {
+        return inscriptionRepository.findByNiveauUuid(niveauUuid);
     }
 
-    public Inscription update(Inscription inscription) {
-        return inscriptionRepository.save(inscription);
-    }
-
-    public void delete(Long id) {
-        inscriptionRepository.deleteById(id);
-    }
-
-    /**
-     * Enregistrer le dépôt d'un dossier d'inscription
-     */
     public Inscription enregistrerDossierInscription(Inscription inscription) {
-        inscription.setStatut(StatutInscription.ACTIVE);
-        return this.create(inscription);
-    }
-
-    /**
-     * Valider les pièces fournies (check-list basée sur les fiches)
-     */
-    public Inscription validerPiecesInscription(Long inscriptionId) {
-        return inscriptionRepository.findById(inscriptionId).map(inscription -> {
+        if (inscription.getUuid() == null) {
+            inscription.setUuid(UUID.randomUUID());
+        }
+        inscription.setCreatedAt(LocalDateTime.now());
+        inscription.setUpdatedAt(LocalDateTime.now());
+        if (inscription.getStatut() == null) {
             inscription.setStatut(StatutInscription.ACTIVE);
-            return inscriptionRepository.save(inscription);
-        }).orElseThrow(() -> new IllegalArgumentException("Inscription non trouvée"));
+        }
+        return inscriptionRepository.save(inscription);
     }
 
-    /**
-     * Enregistrer le paiement des frais d'inscription
-     */
-    public Inscription enregistrerPaiementInscription(Long inscriptionId) {
-        return inscriptionRepository.findById(inscriptionId).map(inscription -> {
-            inscription.setStatut(StatutInscription.ACTIVE);
-            return inscriptionRepository.save(inscription);
-        }).orElseThrow(() -> new IllegalArgumentException("Inscription non trouvée"));
+    public Inscription update(UUID uuid, Inscription inscription) {
+        inscription.setUuid(uuid);
+        inscription.setUpdatedAt(LocalDateTime.now());
+        return inscriptionRepository.save(inscription);
     }
 
-    /**
-     * Obtenir les inscriptions actives pour un élève
-     */
-    public List<Inscription> obtenirInscriptionsActives(UUID eleveId) {
-        return this.findByEleveId(eleveId).stream()
-                .filter(i -> i.getStatut() == StatutInscription.ACTIVE)
-                .toList();
+    public void deleteByUuid(UUID uuid) {
+        inscriptionRepository.deleteByUuid(uuid);
     }
 
-    /**
-     * Marquer une inscription comme terminée
-     */
-    public void terminerInscription(Long inscriptionId) {
-        inscriptionRepository.findById(inscriptionId).ifPresent(inscription -> {
-            inscription.setStatut(StatutInscription.TERMINEE);
-            inscriptionRepository.save(inscription);
-        });
+    public Inscription validerPiecesInscription(UUID inscriptionUuid) {
+        Inscription insc = inscriptionRepository.findByUuid(inscriptionUuid)
+                .orElseThrow(() -> new IllegalArgumentException("Inscription non trouvée"));
+        insc.setStatut(StatutInscription.ACTIVE);
+        insc.setUpdatedAt(LocalDateTime.now());
+        return inscriptionRepository.save(insc);
+    }
+
+    public Inscription enregistrerPaiementInscription(UUID inscriptionUuid) {
+        Inscription insc = inscriptionRepository.findByUuid(inscriptionUuid)
+                .orElseThrow(() -> new IllegalArgumentException("Inscription non trouvée"));
+        insc.setStatut(StatutInscription.ACTIVE);
+        insc.setUpdatedAt(LocalDateTime.now());
+        return inscriptionRepository.save(insc);
     }
 }
-

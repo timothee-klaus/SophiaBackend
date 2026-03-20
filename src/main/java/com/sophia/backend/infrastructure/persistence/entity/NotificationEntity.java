@@ -21,11 +21,17 @@ public class NotificationEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
+    private UUID uuid = UUID.randomUUID();
+
     @Enumerated(EnumType.STRING)
     private TypeNotification type;
 
-    private UUID expediteurId;
-    private UUID destinataireId;
+    @Column(name = "expediteur_id")
+    private UUID expediteurUuid;
+
+    @Column(name = "destinataire_id")
+    private UUID destinataireUuid;
 
     @Column(columnDefinition = "text")
     private String contenu;
@@ -35,4 +41,3 @@ public class NotificationEntity extends BaseEntity {
     private String lien;
     private LocalDateTime createdAt;
 }
-

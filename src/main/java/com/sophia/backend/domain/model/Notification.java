@@ -12,14 +12,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notification {
+    private UUID uuid;
     private Long id;
     private TypeNotification type;
-    private UUID expediteurId;
-    private UUID destinataireId;
+    private UUID expediteurUuid;
+    private UUID destinataireUuid;
     private String contenu;
     private boolean lu;
     private LocalDateTime dateCreation;
-    private String lien;
+    private String lien;  // Lien vers l'entité concernée (ex: /eleves/123)
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

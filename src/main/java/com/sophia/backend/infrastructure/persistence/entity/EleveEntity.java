@@ -37,9 +37,12 @@ public class EleveEntity extends BaseEntity {
     private String nomTuteur;
     private String telephoneTuteur;
     private String emailTuteur;
-    private String photoPath;
-    private String acteNaissancePath;
-    private Long etablissementId;
+
+    // Documents fournis (gérés par checkbox)
+    private boolean photoFournie;
+    private boolean acteNaissanceFourni;
+    private boolean certificatResidenceFourni;
+    private boolean bulletinsFournis;
 
     @Enumerated(EnumType.STRING)
     private StatutDossier statutDossier;

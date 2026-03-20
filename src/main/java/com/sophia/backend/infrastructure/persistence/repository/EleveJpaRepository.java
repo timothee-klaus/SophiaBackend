@@ -11,6 +11,5 @@ import java.util.UUID;
 @Repository
 public interface EleveJpaRepository extends JpaRepository<EleveEntity, UUID> {
     Optional<EleveEntity> findByMatricule(String matricule);
-    List<EleveEntity> findByEtablissementId(Long etablissementId);
 }
 

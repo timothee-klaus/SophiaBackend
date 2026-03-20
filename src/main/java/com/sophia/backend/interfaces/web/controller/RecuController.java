@@ -1,70 +1,112 @@
 package com.sophia.backend.interfaces.web.controller;
 
-import com.sophia.backend.application.dto.RecuDTO;
-import com.sophia.backend.application.service.RecuService;
+import com.sophia.backend.application.dto.InfoRecuDTO;
+import com.sophia.backend.application.service.PaiementService;
+import com.sophia.backend.domain.model.*;
+import com.sophia.backend.domain.repository.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/recus")
-@Tag(name = "Reçus", description = "Gestion des reçus (inscription, paiements)")
+@Tag(name = "Reçus", description = "Informations pour générer les reçus (frontend)")
 public class RecuController {
 
-    private final RecuService service;
+    private final PaiementService paiementService;
+    private final EleveRepository eleveRepository;
+    private final InscriptionRepository inscriptionRepository;
+    private final NiveauRepository niveauRepository;
+    private final AnneeScolaireRepository anneeScolaireRepository;
+    private final TranchePaiementRepository tranchePaiementRepository;
+    private final FraisDiversRepository fraisDiversRepository;
 
-    public RecuController(RecuService service) {
-        this.service = service;
+    public RecuController(
+            PaiementService paiementService,
+            EleveRepository eleveRepository,
+            InscriptionRepository inscriptionRepository,
+            NiveauRepository niveauRepository,
+            AnneeScolaireRepository anneeScolaireRepository,
+            TranchePaiementRepository tranchePaiementRepository,
+            FraisDiversRepository fraisDiversRepository) {
+        this.paiementService = paiementService;
+        this.eleveRepository = eleveRepository;
+        this.inscriptionRepository = inscriptionRepository;
+        this.niveauRepository = niveauRepository;
+        this.anneeScolaireRepository = anneeScolaireRepository;
+        this.tranchePaiementRepository = tranchePaiementRepository;
+        this.fraisDiversRepository = fraisDiversRepository;
     }
 
-    @Operation(summary = "Générer reçu d'inscription", description = "Génère un reçu pour les frais d'inscription")
-    @PostMapping("/inscription")
-    public ResponseEntity<RecuDTO> genererRecuInscription(@RequestParam Long paiementId) {
-        return ResponseEntity.ok(new RecuDTO());
-    }
+    @GetMapping("/{paiementUuid}")
+    @Operation(
+        summary = "Obtenir les informations pour un reçu",
+        description = "Récupère toutes les informations nécessaires pour générer un reçu de paiement.\n\n" +
+            "Le frontend pourra utiliser ces données pour générer un PDF ou imprimer le reçu."
+    )
+    public ResponseEntity<InfoRecuDTO> getInfoRecu(@PathVariable UUID paiementUuid) {
+        Paiement paiement = paiementService.findByUuid(paiementUuid)
+                .orElseThrow(() -> new RuntimeException("Paiement non trouvé"));
 
-    @Operation(summary = "Générer reçu de paiement", description = "Génère un reçu de paiement (PDF) à remettre au parent")
-    @PostMapping("/paiement")
-    public ResponseEntity<RecuDTO> genererRecuPaiement(@RequestParam Long paiementId) {
-        return ResponseEntity.ok(new RecuDTO());
-    }
+        Inscription inscription = inscriptionRepository.findByUuid(paiement.getInscriptionUuid())
+                .orElseThrow(() -> new RuntimeException("Inscription non trouvée"));
 
-    @Operation(summary = "Consulter un reçu", description = "Récupère les détails d'un reçu")
-    @GetMapping("/{id}")
-    public ResponseEntity<RecuDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(new RecuDTO());
-    }
+        Eleve eleve = eleveRepository.findById(inscription.getEleveUuid())
+                .orElseThrow(() -> new RuntimeException("Élève non trouvé"));
 
-    @Operation(summary = "Lister les reçus", description = "Liste tous les reçus")
-    @GetMapping
-    public ResponseEntity<List<RecuDTO>> getAll() {
-        return ResponseEntity.ok(List.of());
-    }
+        Niveau niveau = niveauRepository.findByUuid(inscription.getNiveauUuid())
+                .orElseThrow(() -> new RuntimeException("Niveau non trouvé"));
 
-    @Operation(summary = "Télécharger un reçu", description = "Télécharge/récupère le PDF du reçu")
-    @PostMapping("/{id}/telecharger")
-    public ResponseEntity<byte[]> telechargerRecu(@PathVariable Long id) {
-        return ResponseEntity.ok(new byte[0]);
-    }
+        AnneeScolaire anneeScolaire = anneeScolaireRepository.findByUuid(inscription.getAnneeScolaireUuid())
+                .orElseThrow(() -> new RuntimeException("Année scolaire non trouvée"));
 
-    @Operation(summary = "Scanner/téléverser reçu signé", description = "Permet de télécharger un reçu déjà signé")
-    @PostMapping("/{id}/upload-signe")
-    public ResponseEntity<RecuDTO> uploadRecuSigne(@PathVariable Long id) {
-        return ResponseEntity.ok(new RecuDTO());
-    }
+        InfoRecuDTO info = new InfoRecuDTO();
 
-    @Operation(summary = "Modifier un reçu", description = "Modifie les détails d'un reçu")
-    @PutMapping("/{id}")
-    public ResponseEntity<RecuDTO> update(@PathVariable Long id, @RequestBody RecuDTO dto) {
-        return ResponseEntity.ok(dto);
-    }
+        // Info paiement
+        info.setPaiementUuid(paiement.getUuid());
+        info.setMontant(paiement.getMontant());
+        info.setDatePaiement(paiement.getDatePaiement());
+        info.setModePaiement(paiement.getModePaiement());
+        info.setTypePaiement(paiement.getTypePaiement());
+        info.setCommentaire(paiement.getCommentaire());
 
-    @Operation(summary = "Supprimer un reçu", description = "Supprime un reçu")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        return ResponseEntity.noContent().build();
+        // Info élève
+        info.setMatriculeEleve(eleve.getMatricule());
+        info.setNomEleve(eleve.getNom());
+        info.setPrenomEleve(eleve.getPrenom());
+
+        // Info inscription
+        info.setNiveau(niveau.getNom());
+        info.setAnneeScolaire(anneeScolaire.getLibelle());
+
+        // Info tranche ou frais selon le type
+        if (paiement.getReferenceUuid() != null) {
+            switch (paiement.getTypePaiement()) {
+                case SCOLARITE:
+                    tranchePaiementRepository.findByUuid(paiement.getReferenceUuid())
+                            .ifPresent(tranche -> {
+                                info.setNomTranche(tranche.getNomTranche());
+                                info.setMontantTranche(tranche.getMontant());
+                            });
+                    break;
+                case DIVERS:
+                    fraisDiversRepository.findByUuid(paiement.getReferenceUuid())
+                            .ifPresent(frais -> {
+                                info.setLibelleFrais(frais.getDescription());
+                                info.setMontantFrais(frais.getMontant());
+                            });
+                    break;
+                case INSCRIPTION:
+                    info.setLibelleFrais("Frais d'inscription");
+                    info.setMontantFrais(paiement.getMontant());
+                    break;
+            }
+        }
+
+        return ResponseEntity.ok(info);
     }
 }
+

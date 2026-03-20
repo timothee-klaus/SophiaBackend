@@ -10,9 +10,9 @@ public class FraisScolaireMapper {
     public FraisScolaireDTO toDto(FraisScolaire f) {
         if (f == null) return null;
         FraisScolaireDTO dto = new FraisScolaireDTO();
-        dto.setId(f.getId());
-        dto.setNiveauId(f.getNiveauId());
-        dto.setAnneeScolaireId(f.getAnneeScolaireId());
+        dto.setUuid(f.getUuid());
+        dto.setNiveauUuid(f.getNiveauUuid());
+        dto.setAnneeScolaireUuid(f.getAnneeScolaireUuid());
         dto.setMontantTotal(f.getMontantTotal());
         dto.setDescription(f.getDescription());
         dto.setCreatedAt(f.getCreatedAt());
@@ -23,9 +23,9 @@ public class FraisScolaireMapper {
     public FraisScolaire toDomain(FraisScolaireDTO d) {
         if (d == null) return null;
         FraisScolaire f = new FraisScolaire();
-        f.setId(d.getId());
-        f.setNiveauId(d.getNiveauId());
-        f.setAnneeScolaireId(d.getAnneeScolaireId());
+        f.setUuid(d.getUuid());
+        f.setNiveauUuid(d.getNiveauUuid());
+        f.setAnneeScolaireUuid(d.getAnneeScolaireUuid());
         f.setMontantTotal(d.getMontantTotal());
         f.setDescription(d.getDescription());
         f.setCreatedAt(d.getCreatedAt());
@@ -37,8 +37,11 @@ public class FraisScolaireMapper {
         if (e == null) return null;
         FraisScolaire f = new FraisScolaire();
         f.setId(e.getId());
+        f.setUuid(e.getUuid());
         f.setNiveauId(e.getNiveauId());
+        f.setNiveauUuid(e.getNiveauUuid());
         f.setAnneeScolaireId(e.getAnneeScolaireId());
+        f.setAnneeScolaireUuid(e.getAnneeScolaireUuid());
         f.setMontantTotal(e.getMontantTotal());
         f.setDescription(e.getDescription());
         f.setCreatedAt(e.getCreatedAt());
@@ -50,8 +53,11 @@ public class FraisScolaireMapper {
         if (f == null) return null;
         FraisScolaireEntity e = new FraisScolaireEntity();
         e.setId(f.getId());
+        e.setUuid(f.getUuid());
         e.setNiveauId(f.getNiveauId());
+        e.setNiveauUuid(f.getNiveauUuid());
         e.setAnneeScolaireId(f.getAnneeScolaireId());
+        e.setAnneeScolaireUuid(f.getAnneeScolaireUuid());
         e.setMontantTotal(f.getMontantTotal());
         e.setDescription(f.getDescription());
         e.setCreatedAt(f.getCreatedAt());

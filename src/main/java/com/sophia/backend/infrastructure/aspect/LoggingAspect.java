@@ -25,11 +25,8 @@ public class LoggingAspect {
     public void logCreate(JoinPoint joinPoint) {
         try {
             String entity = extractEntity(joinPoint.getSignature().getDeclaringTypeName());
-            String userId = getCurrentUserId();
-            String ipAddress = getClientIp();
 
             logService.enregistrerCreation(
-                userId != null ? UUID.fromString(userId) : UUID.randomUUID(),
                 entity,
                 "",
                 "Creation de " + entity
@@ -44,10 +41,8 @@ public class LoggingAspect {
     public void logUpdate(JoinPoint joinPoint) {
         try {
             String entity = extractEntity(joinPoint.getSignature().getDeclaringTypeName());
-            String userId = getCurrentUserId();
 
             logService.enregistrerModification(
-                userId != null ? UUID.fromString(userId) : UUID.randomUUID(),
                 entity,
                 "",
                 "",
@@ -64,10 +59,8 @@ public class LoggingAspect {
     public void logDelete(JoinPoint joinPoint) {
         try {
             String entity = extractEntity(joinPoint.getSignature().getDeclaringTypeName());
-            String userId = getCurrentUserId();
 
             logService.enregistrerSuppression(
-                userId != null ? UUID.fromString(userId) : UUID.randomUUID(),
                 entity,
                 "",
                 "Suppression de " + entity

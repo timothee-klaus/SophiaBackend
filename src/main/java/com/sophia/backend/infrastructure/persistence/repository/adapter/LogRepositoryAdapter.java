@@ -1,9 +1,10 @@
 package com.sophia.backend.infrastructure.persistence.repository.adapter;
 
+import com.sophia.backend.domain.enums.ActionLog;
 import com.sophia.backend.domain.model.Log;
 import com.sophia.backend.domain.repository.LogRepository;
 import com.sophia.backend.infrastructure.persistence.entity.LogEntity;
-import com.sophia.backend.infrastructure.persistence.mapper.LogMapper;
+import com.sophia.backend.infrastructure.persistence.mapper.LogEntityMapper;
 import com.sophia.backend.infrastructure.persistence.repository.LogJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LogRepositoryAdapter implements LogRepository {
     private final LogJpaRepository jpaRepository;
-    private final LogMapper mapper;
+    private final LogEntityMapper mapper;
 
     @Override
     public Optional<Log> findById(Long id) {
@@ -25,11 +26,10 @@ public class LogRepositoryAdapter implements LogRepository {
     }
 
     @Override
-    public List<Log> findByUtilisateurId(UUID utilisateurId) {
-        return jpaRepository.findByUtilisateurId(utilisateurId).stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
+    public Optional<Log> findByUuid(UUID uuid) {
+        return jpaRepository.findByUuid(uuid).map(mapper::toDomain);
     }
+
 
     @Override
     public Log save(Log log) {
@@ -46,7 +46,40 @@ public class LogRepositoryAdapter implements LogRepository {
     }
 
     @Override
+    public List<Log> findByUtilisateurId(UUID utilisateurUuid) {
+        return jpaRepository.findByUtilisateurId(utilisateurUuid).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Log> findByEntite(String entite) {
+        return jpaRepository.findByEntite(entite).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Log> findByEntiteAndEntiteId(String entite, String entiteId) {
+        return jpaRepository.findByEntiteAndEntiteId(entite, entiteId).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Log> findByAction(ActionLog action) {
+        return jpaRepository.findByAction(action).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void deleteById(Long id) {
         jpaRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteByUuid(UUID uuid) {
+        jpaRepository.deleteByUuid(uuid);
     }
 }

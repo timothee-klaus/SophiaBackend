@@ -5,10 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface AnneeScolaireJpaRepository extends JpaRepository<AnneeScolaireEntity, Long> {
-    Optional<AnneeScolaireEntity> findByEstActive(Boolean estActive);
-    Optional<AnneeScolaireEntity> findByEstActiveTrue();
+    Optional<AnneeScolaireEntity> findByUuid(UUID uuid);
+    void deleteByUuid(UUID uuid);
 }
 

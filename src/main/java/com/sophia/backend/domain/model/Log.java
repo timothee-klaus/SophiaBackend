@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Entité métier représentant un log d'action dans le système.
+ * Log simplifié des actions dans le système.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Log {
-    private Long id;
+    private UUID uuid;
     private UUID utilisateurId;
     private ActionLog action;
     private String entite;
@@ -27,6 +27,4 @@ public class Log {
     private String userAgent;
     private LocalDateTime dateAction;
     private String description;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

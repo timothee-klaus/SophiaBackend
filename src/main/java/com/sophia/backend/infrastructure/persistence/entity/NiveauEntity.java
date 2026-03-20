@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "niveau")
 @Data
@@ -17,9 +19,15 @@ public class NiveauEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
+    private UUID uuid;
+
     private String nom;
-    private Long cycleId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cycle_id")
+    private CycleEntity cycle;
+
     private Long etablissementId;
     private Integer ordre;
 }
-

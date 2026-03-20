@@ -10,11 +10,12 @@ public class FraisInscriptionMapper {
     public FraisInscriptionDTO toDto(FraisInscription f) {
         if (f == null) return null;
         FraisInscriptionDTO dto = new FraisInscriptionDTO();
-        dto.setId(f.getId());
-        dto.setCycleId(f.getCycleId());
-        dto.setNiveauId(f.getNiveauId());
-        dto.setAnneeScolaireId(f.getAnneeScolaireId());
+        dto.setUuid(f.getUuid());
+        dto.setCycleUuid(f.getCycleUuid());
+        dto.setNiveauUuid(f.getNiveauUuid());
+        dto.setAnneeScolaireUuid(f.getAnneeScolaireUuid());
         dto.setMontant(f.getMontant());
+        dto.setDescription(f.getDescription());
         dto.setCreatedAt(f.getCreatedAt());
         dto.setUpdatedAt(f.getUpdatedAt());
         return dto;
@@ -23,12 +24,14 @@ public class FraisInscriptionMapper {
     public FraisInscription toDomain(FraisInscriptionDTO d) {
         if (d == null) return null;
         FraisInscription f = new FraisInscription();
-        f.setId(d.getId());
-        f.setCycleId(d.getCycleId());
-        f.setNiveauId(d.getNiveauId());
-        f.setAnneeScolaireId(d.getAnneeScolaireId());
+        f.setUuid(d.getUuid());
+        f.setCycleUuid(d.getCycleUuid());
+        f.setNiveauUuid(d.getNiveauUuid());
+        f.setAnneeScolaireUuid(d.getAnneeScolaireUuid());
         f.setMontant(d.getMontant());
-        // Ne pas mapper createdAt/updatedAt (READ_ONLY)
+        f.setDescription(d.getDescription());
+        f.setCreatedAt(d.getCreatedAt());
+        f.setUpdatedAt(d.getUpdatedAt());
         return f;
     }
 
@@ -36,10 +39,14 @@ public class FraisInscriptionMapper {
         if (e == null) return null;
         FraisInscription f = new FraisInscription();
         f.setId(e.getId());
-        f.setCycleId(e.getCycleId());
+        f.setUuid(e.getUuid());
+        f.setCycleUuid(e.getCycleUuid());
         f.setNiveauId(e.getNiveauId());
+        f.setNiveauUuid(e.getNiveauUuid());
         f.setAnneeScolaireId(e.getAnneeScolaireId());
+        f.setAnneeScolaireUuid(e.getAnneeScolaireUuid());
         f.setMontant(e.getMontant());
+        f.setDescription(e.getDescription());
         f.setCreatedAt(e.getCreatedAt());
         f.setUpdatedAt(e.getUpdatedAt());
         return f;
@@ -49,13 +56,16 @@ public class FraisInscriptionMapper {
         if (f == null) return null;
         FraisInscriptionEntity e = new FraisInscriptionEntity();
         e.setId(f.getId());
-        e.setCycleId(f.getCycleId());
+        e.setUuid(f.getUuid());
+        e.setCycleUuid(f.getCycleUuid());
         e.setNiveauId(f.getNiveauId());
+        e.setNiveauUuid(f.getNiveauUuid());
         e.setAnneeScolaireId(f.getAnneeScolaireId());
+        e.setAnneeScolaireUuid(f.getAnneeScolaireUuid());
         e.setMontant(f.getMontant());
+        e.setDescription(f.getDescription());
         e.setCreatedAt(f.getCreatedAt());
         e.setUpdatedAt(f.getUpdatedAt());
         return e;
     }
 }
-

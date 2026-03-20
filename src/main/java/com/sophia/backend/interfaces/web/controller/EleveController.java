@@ -34,6 +34,7 @@ public class EleveController {
     })
     @PostMapping
     public ResponseEntity<EleveDTO> create(@RequestBody EleveDTO dto) {
+        dto.setUuid(null);
         Eleve eleve = mapper.toDomain(dto);
         Eleve saved = service.creerDossierEleve(eleve);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
@@ -54,9 +55,9 @@ public class EleveController {
         @ApiResponse(responseCode = "200", description = "Élève trouvé"),
         @ApiResponse(responseCode = "404", description = "Élève non trouvé")
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<EleveDTO> getById(@Parameter(description = "ID unique de l'eleve (UUID)") @PathVariable UUID id) {
-        return service.findById(id)
+    @GetMapping("/{uuid}")
+    public ResponseEntity<EleveDTO> getByUuid(@Parameter(description = "UUID unique de l'eleve") @PathVariable UUID uuid) {
+        return service.findByUuid(uuid)
                 .map(e -> ResponseEntity.ok(mapper.toDto(e)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -66,11 +67,11 @@ public class EleveController {
         @ApiResponse(responseCode = "200", description = "Élève modifié avec succès"),
         @ApiResponse(responseCode = "404", description = "Élève non trouvé")
     })
-    @PutMapping("/{id}")
-    public ResponseEntity<EleveDTO> update(@Parameter(description = "ID de l'eleve") @PathVariable UUID id, @RequestBody EleveDTO dto) {
+    @PutMapping("/{uuid}")
+    public ResponseEntity<EleveDTO> update(@Parameter(description = "UUID de l'eleve") @PathVariable UUID uuid, @RequestBody EleveDTO dto) {
         Eleve eleve = mapper.toDomain(dto);
         try {
-            Eleve updated = service.modifierEleve(id, eleve);
+            Eleve updated = service.modifierEleve(uuid, eleve);
             return ResponseEntity.ok(mapper.toDto(updated));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
@@ -79,9 +80,9 @@ public class EleveController {
 
     @Operation(summary = "Archiver un élève", description = "Archive un élève (départ, fin de cycle)")
     @ApiResponse(responseCode = "200", description = "Élève archivé avec succès")
-    @PostMapping("/{id}/archiver")
-    public ResponseEntity<EleveDTO> archiver(@Parameter(description = "ID de l'eleve a archiver") @PathVariable UUID id) {
-        service.archiverEleve(id);
+    @PostMapping("/{uuid}/archiver")
+    public ResponseEntity<EleveDTO> archiver(@Parameter(description = "UUID de l'eleve a archiver") @PathVariable UUID uuid) {
+        service.archiverEleve(uuid);
         return ResponseEntity.ok().build();
     }
 }

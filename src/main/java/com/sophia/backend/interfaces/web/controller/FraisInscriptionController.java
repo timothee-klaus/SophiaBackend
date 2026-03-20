@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/frais-inscription")
@@ -23,6 +24,7 @@ public class FraisInscriptionController {
     @Operation(summary = "Créer frais d'inscription", description = "Crée une configuration de frais d'inscription")
     @PostMapping
     public ResponseEntity<FraisInscriptionDTO> create(@RequestBody FraisInscriptionDTO dto) {
+        dto.setUuid(null);
         return ResponseEntity.ok(dto);
     }
 
@@ -33,26 +35,26 @@ public class FraisInscriptionController {
     }
 
     @Operation(summary = "Frais d'inscription par année", description = "Retourne les frais d'inscription pour une année scolaire")
-    @GetMapping("/annee/{anneId}")
-    public ResponseEntity<List<FraisInscriptionDTO>> getByAnneeScolaire(@PathVariable Long anneId) {
+    @GetMapping("/annee/{anneUuid}")
+    public ResponseEntity<List<FraisInscriptionDTO>> getByAnneeScolaire(@PathVariable UUID anneUuid) {
         return ResponseEntity.ok(List.of());
     }
 
     @Operation(summary = "Récupérer frais d'inscription", description = "Récupère les détails d'une configuration de frais d'inscription")
-    @GetMapping("/{id}")
-    public ResponseEntity<FraisInscriptionDTO> getById(@PathVariable Long id) {
+    @GetMapping("/{uuid}")
+    public ResponseEntity<FraisInscriptionDTO> getByUuid(@PathVariable UUID uuid) {
         return ResponseEntity.ok(new FraisInscriptionDTO());
     }
 
     @Operation(summary = "Modifier frais d'inscription", description = "Modifie une configuration de frais d'inscription")
-    @PutMapping("/{id}")
-    public ResponseEntity<FraisInscriptionDTO> update(@PathVariable Long id, @RequestBody FraisInscriptionDTO dto) {
+    @PutMapping("/{uuid}")
+    public ResponseEntity<FraisInscriptionDTO> update(@PathVariable UUID uuid, @RequestBody FraisInscriptionDTO dto) {
         return ResponseEntity.ok(dto);
     }
 
     @Operation(summary = "Supprimer frais d'inscription", description = "Supprime une configuration de frais d'inscription")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> delete(@PathVariable UUID uuid) {
         return ResponseEntity.noContent().build();
     }
 }

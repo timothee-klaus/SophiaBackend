@@ -10,13 +10,20 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
 public class FraisDiversRepositoryAdapter implements FraisDiversRepository {
+
     private final FraisDiversJpaRepository jpaRepository;
     private final FraisDiversMapper mapper;
+
+    @Override
+    public Optional<FraisDivers> findByUuid(UUID uuid) {
+        return jpaRepository.findByUuid(uuid).map(mapper::toDomain);
+    }
 
     @Override
     public Optional<FraisDivers> findById(Long id) {
@@ -31,8 +38,15 @@ public class FraisDiversRepositoryAdapter implements FraisDiversRepository {
     }
 
     @Override
-    public List<FraisDivers> findByNiveauId(Long niveauId) {
-        return jpaRepository.findByNiveauId(niveauId).stream()
+    public List<FraisDivers> findByNiveauUuid(UUID niveauUuid) {
+        return jpaRepository.findByNiveauUuid(niveauUuid).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FraisDivers> findByAnneeScolaireUuid(UUID anneeScolaireUuid) {
+        return jpaRepository.findByAnneeScolaireUuid(anneeScolaireUuid).stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
@@ -45,14 +59,12 @@ public class FraisDiversRepositoryAdapter implements FraisDiversRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
-        jpaRepository.deleteById(id);
+    public void deleteByUuid(UUID uuid) {
+        jpaRepository.deleteByUuid(uuid);
     }
 
     @Override
-    public List<FraisDivers> findByAnneeScolaireId(Long anneeScolaireId) {
-        return jpaRepository.findByAnneeScolaireId(anneeScolaireId).stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
+    public void deleteById(Long id) {
+        jpaRepository.deleteById(id);
     }
 }

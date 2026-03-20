@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/tranches-paiement")
@@ -23,6 +24,7 @@ public class TranchePaiementController {
     @Operation(summary = "Créer tranche de paiement", description = "Crée une nouvelle tranche de paiement (1ère, 2ème, 3ème, etc.)")
     @PostMapping
     public ResponseEntity<TranchePaiementDTO> create(@RequestBody TranchePaiementDTO dto) {
+        dto.setUuid(null);
         return ResponseEntity.ok(dto);
     }
 
@@ -33,26 +35,26 @@ public class TranchePaiementController {
     }
 
     @Operation(summary = "Tranches d'un frais scolaire", description = "Retourne les tranches associées à un frais scolaire spécifique")
-    @GetMapping("/frais/{fraisId}")
-    public ResponseEntity<List<TranchePaiementDTO>> getByFraisId(@PathVariable Long fraisId) {
+    @GetMapping("/frais/{fraisUuid}")
+    public ResponseEntity<List<TranchePaiementDTO>> getByFraisUuid(@PathVariable UUID fraisUuid) {
         return ResponseEntity.ok(List.of());
     }
 
     @Operation(summary = "Récupérer une tranche", description = "Retourne les détails d'une tranche de paiement")
-    @GetMapping("/{id}")
-    public ResponseEntity<TranchePaiementDTO> getById(@PathVariable Long id) {
+    @GetMapping("/{uuid}")
+    public ResponseEntity<TranchePaiementDTO> getByUuid(@PathVariable UUID uuid) {
         return ResponseEntity.ok(new TranchePaiementDTO());
     }
 
     @Operation(summary = "Modifier une tranche", description = "Modifie les informations d'une tranche de paiement")
-    @PutMapping("/{id}")
-    public ResponseEntity<TranchePaiementDTO> update(@PathVariable Long id, @RequestBody TranchePaiementDTO dto) {
+    @PutMapping("/{uuid}")
+    public ResponseEntity<TranchePaiementDTO> update(@PathVariable UUID uuid, @RequestBody TranchePaiementDTO dto) {
         return ResponseEntity.ok(dto);
     }
 
     @Operation(summary = "Supprimer une tranche", description = "Supprime une tranche de paiement")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> delete(@PathVariable UUID uuid) {
         return ResponseEntity.noContent().build();
     }
 }

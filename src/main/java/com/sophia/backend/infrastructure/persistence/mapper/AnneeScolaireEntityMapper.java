@@ -10,11 +10,13 @@ public class AnneeScolaireEntityMapper {
         if (e == null) return null;
         AnneeScolaire d = new AnneeScolaire();
         d.setId(e.getId());
+        d.setUuid(e.getUuid());
         d.setLibelle(e.getLibelle());
         d.setDateDebut(e.getDateDebut());
         d.setDateFin(e.getDateFin());
-        d.setEstActive(e.isEstActive());
+        // estActive est calculé, pas mappé
         d.setCreatedAt(e.getCreatedAt());
+        d.setUpdatedAt(e.getUpdatedAt());
         return d;
     }
 
@@ -22,11 +24,13 @@ public class AnneeScolaireEntityMapper {
         if (d == null) return null;
         AnneeScolaireEntity e = new AnneeScolaireEntity();
         e.setId(d.getId());
+        e.setUuid(d.getUuid());
         e.setLibelle(d.getLibelle());
         e.setDateDebut(d.getDateDebut());
         e.setDateFin(d.getDateFin());
-        e.setEstActive(d.isEstActive());
+        // estActive est calculé, pas mappé
         e.setCreatedAt(d.getCreatedAt());
+        e.setUpdatedAt(d.getUpdatedAt());
         return e;
     }
 }

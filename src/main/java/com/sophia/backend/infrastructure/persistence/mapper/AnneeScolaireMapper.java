@@ -10,7 +10,7 @@ public class AnneeScolaireMapper {
     public AnneeScolaireDTO toDto(AnneeScolaire a) {
         if (a == null) return null;
         AnneeScolaireDTO dto = new AnneeScolaireDTO();
-        dto.setId(a.getId());
+        dto.setUuid(a.getUuid());
         dto.setLibelle(a.getLibelle());
         dto.setDateDebut(a.getDateDebut());
         dto.setDateFin(a.getDateFin());
@@ -23,11 +23,11 @@ public class AnneeScolaireMapper {
     public AnneeScolaire toDomain(AnneeScolaireDTO d) {
         if (d == null) return null;
         AnneeScolaire a = new AnneeScolaire();
-        a.setId(d.getId());
+        a.setUuid(d.getUuid());
         a.setLibelle(d.getLibelle());
         a.setDateDebut(d.getDateDebut());
         a.setDateFin(d.getDateFin());
-        a.setEstActive(d.isEstActive());
+        // Ne pas mapper estActive (calculé par le système)
         // Ne pas mapper createdAt, updatedAt (READ_ONLY)
         return a;
     }
@@ -36,10 +36,11 @@ public class AnneeScolaireMapper {
         if (e == null) return null;
         AnneeScolaire a = new AnneeScolaire();
         a.setId(e.getId());
+        a.setUuid(e.getUuid());
         a.setLibelle(e.getLibelle());
         a.setDateDebut(e.getDateDebut());
         a.setDateFin(e.getDateFin());
-        a.setEstActive(e.isEstActive());
+        // estActive est calculé, pas mappé
         a.setCreatedAt(e.getCreatedAt());
         a.setUpdatedAt(e.getUpdatedAt());
         return a;
@@ -49,10 +50,11 @@ public class AnneeScolaireMapper {
         if (a == null) return null;
         AnneeScolaireEntity e = new AnneeScolaireEntity();
         e.setId(a.getId());
+        e.setUuid(a.getUuid());
         e.setLibelle(a.getLibelle());
         e.setDateDebut(a.getDateDebut());
         e.setDateFin(a.getDateFin());
-        e.setEstActive(a.isEstActive());
+        // estActive est calculé, pas mappé
         e.setCreatedAt(a.getCreatedAt());
         e.setUpdatedAt(a.getUpdatedAt());
         return e;

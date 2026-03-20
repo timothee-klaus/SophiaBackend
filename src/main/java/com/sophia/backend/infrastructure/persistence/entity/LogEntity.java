@@ -24,6 +24,9 @@ public class LogEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true, updatable = false)
+    private UUID uuid = UUID.randomUUID();
+
     private UUID utilisateurId;
 
     @Enumerated(EnumType.STRING)
@@ -45,4 +48,3 @@ public class LogEntity extends BaseEntity {
     private LocalDateTime dateAction;
     private String description;
 }
-

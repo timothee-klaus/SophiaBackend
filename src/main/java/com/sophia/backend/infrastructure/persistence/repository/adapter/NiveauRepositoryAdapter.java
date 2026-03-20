@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
@@ -19,29 +20,18 @@ public class NiveauRepositoryAdapter implements NiveauRepository {
     private final NiveauEntityMapper mapper;
 
     @Override
-    public Optional<Niveau> findById(Long id) {
-        return jpaRepository.findById(id).map(mapper::toDomain);
+    public Optional<Niveau> findByUuid(UUID uuid) {
+        return jpaRepository.findByUuid(uuid).map(mapper::toDomain);
     }
 
     @Override
     public List<Niveau> findAll() {
-        return jpaRepository.findAll().stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
+        return jpaRepository.findAll().stream().map(mapper::toDomain).collect(Collectors.toList());
     }
 
     @Override
-    public List<Niveau> findByCycleId(Long cycleId) {
-        return jpaRepository.findByCycleId(cycleId).stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Niveau> findByEtablissementId(Long etablissementId) {
-        return jpaRepository.findByEtablissementId(etablissementId).stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
+    public List<Niveau> findByCycleUuid(UUID cycleUuid) {
+        return jpaRepository.findByCycleUuid(cycleUuid).stream().map(mapper::toDomain).collect(Collectors.toList());
     }
 
     @Override
@@ -52,10 +42,7 @@ public class NiveauRepositoryAdapter implements NiveauRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
-        jpaRepository.deleteById(id);
+    public void deleteByUuid(UUID uuid) {
+        jpaRepository.deleteByUuid(uuid);
     }
 }
-
-
-

@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Table(name = "frais_inscription")
@@ -19,9 +20,14 @@ public class FraisInscriptionEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long cycleId;
-    private Long niveauId;
-    private Long anneeScolaireId;
-    private BigDecimal montant;
-}
+    @Column(unique = true, nullable = false)
+    private UUID uuid;
 
+    private UUID cycleUuid;
+    private Long niveauId;
+    private UUID niveauUuid;
+    private Long anneeScolaireId;
+    private UUID anneeScolaireUuid;
+    private BigDecimal montant;
+    private String description;
+}

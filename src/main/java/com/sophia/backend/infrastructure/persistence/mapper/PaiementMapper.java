@@ -9,16 +9,14 @@ public class PaiementMapper {
     public PaiementDTO toDto(Paiement p) {
         if (p == null) return null;
         PaiementDTO dto = new PaiementDTO();
-        dto.setId(p.getId());
-        dto.setInscriptionId(p.getInscriptionId());
-        dto.setTypePaiement(p.getTypePaiement() != null ? p.getTypePaiement().name() : null);
-        dto.setReferenceId(p.getReferenceId());
+        dto.setUuid(p.getUuid());
+        dto.setInscriptionUuid(p.getInscriptionUuid());
+        dto.setTypePaiement(p.getTypePaiement());
+        dto.setReferenceUuid(p.getReferenceUuid());
         dto.setMontant(p.getMontant());
         dto.setDatePaiement(p.getDatePaiement());
-        dto.setModePaiement(p.getModePaiement() != null ? p.getModePaiement().name() : null);
-        dto.setRecuPath(p.getRecuPath());
+        dto.setModePaiement(p.getModePaiement());
         dto.setCommentaire(p.getCommentaire());
-        dto.setUtilisateurId(p.getUtilisateurId());
         dto.setCreatedAt(p.getCreatedAt());
         dto.setUpdatedAt(p.getUpdatedAt());
         return dto;
@@ -27,15 +25,14 @@ public class PaiementMapper {
     public Paiement toDomain(PaiementDTO d) {
         if (d == null) return null;
         Paiement p = new Paiement();
-        p.setId(d.getId());
-        p.setInscriptionId(d.getInscriptionId());
-        p.setReferenceId(d.getReferenceId());
+        p.setUuid(d.getUuid());
+        p.setInscriptionUuid(d.getInscriptionUuid());
+        p.setTypePaiement(d.getTypePaiement());
+        p.setReferenceUuid(d.getReferenceUuid());
         p.setMontant(d.getMontant());
         p.setDatePaiement(d.getDatePaiement());
-        p.setRecuPath(d.getRecuPath());
+        p.setModePaiement(d.getModePaiement());
         p.setCommentaire(d.getCommentaire());
-        p.setUtilisateurId(d.getUtilisateurId());
-        // Ne pas mapper createdAt, updatedAt (READ_ONLY)
         return p;
     }
 }

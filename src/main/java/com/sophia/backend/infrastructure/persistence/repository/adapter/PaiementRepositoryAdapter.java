@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
@@ -19,8 +20,8 @@ public class PaiementRepositoryAdapter implements PaiementRepository {
     private final PaiementEntityMapper mapper;
 
     @Override
-    public Optional<Paiement> findById(Long id) {
-        return jpaRepository.findById(id).map(mapper::toDomain);
+    public Optional<Paiement> findByUuid(UUID uuid) {
+        return jpaRepository.findByUuid(uuid).map(mapper::toDomain);
     }
 
     @Override
@@ -31,8 +32,8 @@ public class PaiementRepositoryAdapter implements PaiementRepository {
     }
 
     @Override
-    public List<Paiement> findByInscriptionId(Long inscriptionId) {
-        return jpaRepository.findByInscriptionId(inscriptionId).stream()
+    public List<Paiement> findByInscriptionUuid(UUID inscriptionUuid) {
+        return jpaRepository.findByInscriptionUuid(inscriptionUuid).stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
@@ -45,8 +46,9 @@ public class PaiementRepositoryAdapter implements PaiementRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
-        jpaRepository.deleteById(id);
+    public void deleteByUuid(UUID uuid) {
+        jpaRepository.deleteByUuid(uuid);
     }
 }
+
 

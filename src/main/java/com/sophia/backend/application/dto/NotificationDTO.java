@@ -1,5 +1,7 @@
 package com.sophia.backend.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sophia.backend.domain.enums.TypeNotification;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,13 +15,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class NotificationDTO extends BaseDTO {
-    private Long id;
-    private String type;
-    private UUID expediteurId;
-    private UUID destinataireId;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private UUID uuid;
+    private TypeNotification type;
+    private UUID expediteurUuid;
+    private UUID destinataireUuid;
     private String contenu;
     private boolean lu;
     private LocalDateTime dateCreation;
     private String lien;
 }
-

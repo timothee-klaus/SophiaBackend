@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
@@ -21,6 +22,11 @@ public class CycleRepositoryAdapter implements CycleRepository {
     @Override
     public Optional<Cycle> findById(Long id) {
         return jpaRepository.findById(id).map(mapper::toDomain);
+    }
+
+    @Override
+    public Optional<Cycle> findByUuid(UUID uuid) {
+        return jpaRepository.findByUuid(uuid).map(mapper::toDomain);
     }
 
     @Override

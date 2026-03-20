@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,8 +21,8 @@ public class AnneeScolaireRepositoryAdapter implements AnneeScolaireRepository {
     private final AnneeScolaireEntityMapper mapper;
 
     @Override
-    public Optional<AnneeScolaire> findById(Long id) {
-        return jpaRepository.findById(id).map(mapper::toDomain);
+    public Optional<AnneeScolaire> findByUuid(UUID uuid) {
+        return jpaRepository.findByUuid(uuid).map(mapper::toDomain);
     }
 
     @Override
@@ -38,14 +40,17 @@ public class AnneeScolaireRepositoryAdapter implements AnneeScolaireRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
-        jpaRepository.deleteById(id);
+    public void deleteByUuid(UUID uuid) {
+        jpaRepository.deleteByUuid(uuid);
     }
 
     @Override
     public Optional<AnneeScolaire> findActive() {
-        return jpaRepository.findByEstActiveTrue().stream()
+        LocalDate today = LocalDate.now();
+        return jpaRepository.findAll().stream()
                 .map(mapper::toDomain)
+                .filter(a -> a.getDateDebut() != null && a.getDateFin() != null)
+                .filter(a -> !today.isBefore(a.getDateDebut()) && !today.isAfter(a.getDateFin()))
                 .findFirst();
     }
 }

@@ -21,9 +21,10 @@ public class EleveEntityMapper {
         d.setNomTuteur(e.getNomTuteur());
         d.setTelephoneTuteur(e.getTelephoneTuteur());
         d.setEmailTuteur(e.getEmailTuteur());
-        d.setPhotoPath(e.getPhotoPath());
-        d.setActeNaissancePath(e.getActeNaissancePath());
-        d.setEtablissementId(e.getEtablissementId());
+        d.setPhotoFournie(e.isPhotoFournie());
+        d.setActeNaissanceFourni(e.isActeNaissanceFourni());
+        d.setCertificatResidenceFourni(e.isCertificatResidenceFourni());
+        d.setBulletinsFournis(e.isBulletinsFournis());
         d.setStatutDossier(e.getStatutDossier());
         d.setDateCreationDossier(e.getDateCreationDossier());
         d.setCreatedAt(e.getCreatedAt());
@@ -46,9 +47,10 @@ public class EleveEntityMapper {
         e.setNomTuteur(d.getNomTuteur());
         e.setTelephoneTuteur(d.getTelephoneTuteur());
         e.setEmailTuteur(d.getEmailTuteur());
-        e.setPhotoPath(d.getPhotoPath());
-        e.setActeNaissancePath(d.getActeNaissancePath());
-        e.setEtablissementId(d.getEtablissementId());
+        e.setPhotoFournie(d.isPhotoFournie());
+        e.setActeNaissanceFourni(d.isActeNaissanceFourni());
+        e.setCertificatResidenceFourni(d.isCertificatResidenceFourni());
+        e.setBulletinsFournis(d.isBulletinsFournis());
         e.setStatutDossier(d.getStatutDossier());
         e.setDateCreationDossier(d.getDateCreationDossier());
         e.setCreatedAt(d.getCreatedAt());

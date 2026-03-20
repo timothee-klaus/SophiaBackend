@@ -14,8 +14,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class LogDTO extends BaseDTO {
-    private Long id;
-    private UUID utilisateurId;
+    private UUID uuid;
+    private UUID utilisateurUuid;
     private String action;
     private String entite;
     private String entiteId;

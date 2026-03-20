@@ -5,12 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface NotificationJpaRepository extends JpaRepository<NotificationEntity, Long> {
-    List<NotificationEntity> findByDestinataireId(UUID destinataireId);
-    List<NotificationEntity> findByExpediteurId(UUID expeditriceId);
-    List<NotificationEntity> findByDestinataireIdAndLuFalse(UUID destinataireId);
+    Optional<NotificationEntity> findByUuid(UUID uuid);
+    List<NotificationEntity> findByDestinataireUuid(UUID destinataireUuid);
+    List<NotificationEntity> findByExpediteurUuid(UUID expeditriceUuid);
+    List<NotificationEntity> findByDestinataireUuidAndLuFalse(UUID destinataireUuid);
 }
 

@@ -4,13 +4,13 @@ import com.sophia.backend.domain.model.Niveau;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface NiveauRepository {
-    Optional<Niveau> findById(Long id);
+    Optional<Niveau> findByUuid(UUID uuid);
     List<Niveau> findAll();
-    List<Niveau> findByCycleId(Long cycleId);
-    List<Niveau> findByEtablissementId(Long etablissementId);
+    List<Niveau> findByCycleUuid(UUID cycleUuid);
     Niveau save(Niveau niveau);
-    void deleteById(Long id);
+    void deleteByUuid(UUID uuid);
 }
 

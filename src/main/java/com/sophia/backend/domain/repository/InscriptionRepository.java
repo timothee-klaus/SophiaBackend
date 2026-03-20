@@ -4,13 +4,14 @@ import com.sophia.backend.domain.model.Inscription;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface InscriptionRepository {
-    Optional<Inscription> findById(Long id);
+    Optional<Inscription> findByUuid(UUID uuid);
     List<Inscription> findAll();
-    List<Inscription> findByEleveId(java.util.UUID eleveId);
-    List<Inscription> findByNiveauId(Long niveauId);
+    List<Inscription> findByEleveUuid(UUID eleveUuid);
+    List<Inscription> findByNiveauUuid(UUID niveauUuid);
     Inscription save(Inscription inscription);
-    void deleteById(Long id);
+    void deleteByUuid(UUID uuid);
 }
 

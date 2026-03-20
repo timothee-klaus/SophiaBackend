@@ -8,10 +8,9 @@ import java.util.UUID;
 
 public interface EleveRepository {
     Optional<Eleve> findById(UUID id);
+    default Optional<Eleve> findByUuid(UUID uuid) { return findById(uuid); }
     Optional<Eleve> findByMatricule(String matricule);
     List<Eleve> findAll();
-    List<Eleve> findByEtablissementId(Long etablissementId);
     Eleve save(Eleve eleve);
     void deleteById(UUID id);
 }
-

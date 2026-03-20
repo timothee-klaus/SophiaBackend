@@ -5,9 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface PaiementJpaRepository extends JpaRepository<PaiementEntity, Long> {
-    List<PaiementEntity> findByInscriptionId(Long inscriptionId);
+    Optional<PaiementEntity> findByUuid(UUID uuid);
+    List<PaiementEntity> findByInscriptionUuid(UUID inscriptionUuid);
+    void deleteByUuid(UUID uuid);
 }
 

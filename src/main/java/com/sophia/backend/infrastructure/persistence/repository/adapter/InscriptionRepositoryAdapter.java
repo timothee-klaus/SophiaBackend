@@ -3,7 +3,7 @@ package com.sophia.backend.infrastructure.persistence.repository.adapter;
 import com.sophia.backend.domain.model.Inscription;
 import com.sophia.backend.domain.repository.InscriptionRepository;
 import com.sophia.backend.infrastructure.persistence.entity.InscriptionEntity;
-import com.sophia.backend.infrastructure.persistence.mapper.InscriptionEntityMapper;
+import com.sophia.backend.infrastructure.persistence.mapper.InscriptionMapper;
 import com.sophia.backend.infrastructure.persistence.repository.InscriptionJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class InscriptionRepositoryAdapter implements InscriptionRepository {
     private final InscriptionJpaRepository jpaRepository;
-    private final InscriptionEntityMapper mapper;
+    private final InscriptionMapper mapper;
 
     @Override
-    public Optional<Inscription> findById(Long id) {
-        return jpaRepository.findById(id).map(mapper::toDomain);
+    public Optional<Inscription> findByUuid(UUID uuid) {
+        return jpaRepository.findByUuid(uuid).map(mapper::toDomain);
     }
 
     @Override
@@ -32,15 +32,15 @@ public class InscriptionRepositoryAdapter implements InscriptionRepository {
     }
 
     @Override
-    public List<Inscription> findByEleveId(UUID eleveId) {
-        return jpaRepository.findByEleveId(eleveId).stream()
+    public List<Inscription> findByEleveUuid(UUID eleveUuid) {
+        return jpaRepository.findByEleveUuid(eleveUuid).stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Inscription> findByNiveauId(Long niveauId) {
-        return jpaRepository.findByNiveauId(niveauId).stream()
+    public List<Inscription> findByNiveauUuid(UUID niveauUuid) {
+        return jpaRepository.findByNiveauUuid(niveauUuid).stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
@@ -53,8 +53,9 @@ public class InscriptionRepositoryAdapter implements InscriptionRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
-        jpaRepository.deleteById(id);
+    public void deleteByUuid(UUID uuid) {
+        jpaRepository.deleteByUuid(uuid);
     }
 }
+
 

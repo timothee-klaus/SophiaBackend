@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,7 @@ public class InscriptionController {
     })
     @PostMapping
     public ResponseEntity<InscriptionDTO> create(@RequestBody InscriptionDTO dto) {
+        dto.setUuid(null);
         Inscription inscription = mapper.toDomain(dto);
         Inscription saved = service.enregistrerDossierInscription(inscription);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
@@ -54,9 +56,9 @@ public class InscriptionController {
         @ApiResponse(responseCode = "200", description = "Inscription trouvée"),
         @ApiResponse(responseCode = "404", description = "Inscription non trouvée")
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<InscriptionDTO> getById(@Parameter(description = "ID de l'inscription") @PathVariable Long id) {
-        return service.findById(id)
+    @GetMapping("/{uuid}")
+    public ResponseEntity<InscriptionDTO> getByUuid(@Parameter(description = "UUID de l'inscription") @PathVariable UUID uuid) {
+        return service.findByUuid(uuid)
                 .map(i -> ResponseEntity.ok(mapper.toDto(i)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -66,10 +68,10 @@ public class InscriptionController {
         @ApiResponse(responseCode = "200", description = "Pièces validées avec succès"),
         @ApiResponse(responseCode = "404", description = "Inscription non trouvée")
     })
-    @PutMapping("/{id}/valider-pieces")
-    public ResponseEntity<InscriptionDTO> validerPieces(@Parameter(description = "ID de l'inscription") @PathVariable Long id) {
+    @PutMapping("/{uuid}/valider-pieces")
+    public ResponseEntity<InscriptionDTO> validerPieces(@Parameter(description = "UUID de l'inscription") @PathVariable UUID uuid) {
         try {
-            Inscription validated = service.validerPiecesInscription(id);
+            Inscription validated = service.validerPiecesInscription(uuid);
             return ResponseEntity.ok(mapper.toDto(validated));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
@@ -81,30 +83,13 @@ public class InscriptionController {
         @ApiResponse(responseCode = "200", description = "Paiement enregistré"),
         @ApiResponse(responseCode = "404", description = "Inscription non trouvée")
     })
-    @PostMapping("/{id}/paiement")
-    public ResponseEntity<InscriptionDTO> enregistrerPaiement(@Parameter(description = "ID de l'inscription") @PathVariable Long id, @RequestBody PaiementDTO paiement) {
+    @PostMapping("/{uuid}/paiement")
+    public ResponseEntity<InscriptionDTO> enregistrerPaiement(@Parameter(description = "UUID de l'inscription") @PathVariable UUID uuid, @RequestBody PaiementDTO paiement) {
         try {
-            Inscription updated = service.enregistrerPaiementInscription(id);
+            Inscription updated = service.enregistrerPaiementInscription(uuid);
             return ResponseEntity.ok(mapper.toDto(updated));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @Operation(summary = "Générer reçu inscription", description = "Génère un reçu pour les frais d'inscription")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Reçu généré"),
-        @ApiResponse(responseCode = "404", description = "Inscription non trouvée")
-    })
-    @PostMapping("/{id}/generer-recu")
-    public ResponseEntity<RecuDTO> genererRecu(@Parameter(description = "ID de l'inscription") @PathVariable Long id) {
-        try {
-            RecuDTO recu = new RecuDTO();
-            return ResponseEntity.ok(recu);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
 }
-
-

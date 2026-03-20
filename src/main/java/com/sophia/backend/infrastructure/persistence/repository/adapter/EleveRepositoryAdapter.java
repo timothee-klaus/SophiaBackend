@@ -36,12 +36,6 @@ public class EleveRepositoryAdapter implements EleveRepository {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Eleve> findByEtablissementId(Long etablissementId) {
-        return jpaRepository.findByEtablissementId(etablissementId).stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public Eleve save(Eleve eleve) {

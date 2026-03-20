@@ -5,9 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface TranchePaiementJpaRepository extends JpaRepository<TranchePaiementEntity, Long> {
-    List<TranchePaiementEntity> findByFraisScolaireId(Long fraisScolaireId);
+    Optional<TranchePaiementEntity> findByUuid(UUID uuid);
+    List<TranchePaiementEntity> findByFraisScolaireUuid(UUID fraisScolaireUuid);
+    void deleteByUuid(UUID uuid);
 }
-

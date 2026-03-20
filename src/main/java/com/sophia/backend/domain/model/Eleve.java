@@ -26,9 +26,13 @@ public class Eleve {
     private String nomTuteur;
     private String telephoneTuteur;
     private String emailTuteur;
-    private String photoPath;
-    private String acteNaissancePath;
-    private Long etablissementId;
+
+    // Indicateurs de documents (gérés par checkbox frontend)
+    private boolean photoFournie;
+    private boolean acteNaissanceFourni;
+    private boolean certificatResidenceFourni;
+    private boolean bulletinsFournis;
+
     private StatutDossier statutDossier;
     private LocalDate dateCreationDossier;
     private LocalDateTime createdAt;

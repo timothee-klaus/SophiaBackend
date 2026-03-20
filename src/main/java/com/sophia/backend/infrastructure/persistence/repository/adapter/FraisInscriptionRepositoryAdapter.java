@@ -10,17 +10,19 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
 public class FraisInscriptionRepositoryAdapter implements FraisInscriptionRepository {
+
     private final FraisInscriptionJpaRepository jpaRepository;
     private final FraisInscriptionMapper mapper;
 
     @Override
-    public Optional<FraisInscription> findById(Long id) {
-        return jpaRepository.findById(id).map(mapper::toDomain);
+    public Optional<FraisInscription> findByUuid(UUID uuid) {
+        return jpaRepository.findByUuid(uuid).map(mapper::toDomain);
     }
 
     @Override
@@ -31,8 +33,15 @@ public class FraisInscriptionRepositoryAdapter implements FraisInscriptionReposi
     }
 
     @Override
-    public List<FraisInscription> findByCycleId(Long cycleId) {
-        return jpaRepository.findByCycleId(cycleId).stream()
+    public List<FraisInscription> findByCycleUuid(UUID cycleUuid) {
+        return jpaRepository.findByCycleUuid(cycleUuid).stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FraisInscription> findByAnneeScolaireUuid(UUID anneeScolaireUuid) {
+        return jpaRepository.findByAnneeScolaireUuid(anneeScolaireUuid).stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
@@ -45,14 +54,7 @@ public class FraisInscriptionRepositoryAdapter implements FraisInscriptionReposi
     }
 
     @Override
-    public void deleteById(Long id) {
-        jpaRepository.deleteById(id);
-    }
-
-    @Override
-    public List<FraisInscription> findByAnneeScolaireId(Long anneeScolaireId) {
-        return jpaRepository.findByAnneeScolaireId(anneeScolaireId).stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
+    public void deleteByUuid(UUID uuid) {
+        jpaRepository.deleteByUuid(uuid);
     }
 }

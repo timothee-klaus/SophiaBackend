@@ -4,13 +4,13 @@ import com.sophia.backend.domain.model.FraisInscription;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface FraisInscriptionRepository {
-    Optional<FraisInscription> findById(Long id);
+    Optional<FraisInscription> findByUuid(UUID uuid);
     List<FraisInscription> findAll();
-    List<FraisInscription> findByCycleId(Long cycleId);
-    List<FraisInscription> findByAnneeScolaireId(Long anneeScolaireId);
+    List<FraisInscription> findByCycleUuid(UUID cycleUuid);
+    List<FraisInscription> findByAnneeScolaireUuid(UUID anneeScolaireUuid);
     FraisInscription save(FraisInscription frais);
-    void deleteById(Long id);
+    void deleteByUuid(UUID uuid);
 }
-

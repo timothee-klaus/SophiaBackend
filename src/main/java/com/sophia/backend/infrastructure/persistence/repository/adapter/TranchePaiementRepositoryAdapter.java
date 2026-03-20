@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
@@ -19,13 +20,20 @@ public class TranchePaiementRepositoryAdapter implements TranchePaiementReposito
     private final TranchePaiementMapper mapper;
 
     @Override
-    public Optional<TranchePaiement> findById(Long id) {
-        return jpaRepository.findById(id).map(mapper::toDomain);
+    public Optional<TranchePaiement> findByUuid(UUID uuid) {
+        return jpaRepository.findByUuid(uuid).map(mapper::toDomain);
     }
 
     @Override
-    public List<TranchePaiement> findByFraisScolaireId(Long fraisScolaireId) {
-        return jpaRepository.findByFraisScolaireId(fraisScolaireId).stream()
+    public List<TranchePaiement> findAll() {
+        return jpaRepository.findAll().stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TranchePaiement> findByFraisScolaireUuid(UUID fraisScolaireUuid) {
+        return jpaRepository.findByFraisScolaireUuid(fraisScolaireUuid).stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
@@ -38,14 +46,7 @@ public class TranchePaiementRepositoryAdapter implements TranchePaiementReposito
     }
 
     @Override
-    public void deleteById(Long id) {
-        jpaRepository.deleteById(id);
-    }
-
-    @Override
-    public List<TranchePaiement> findAll() {
-        return jpaRepository.findAll().stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
+    public void deleteByUuid(UUID uuid) {
+        jpaRepository.deleteByUuid(uuid);
     }
 }

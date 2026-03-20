@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Tag(name = "Paiements", description = "Gestion des paiements scolaires - Enregistrement, suivi des tranches, calcul des soldes et impayes")
@@ -34,6 +35,7 @@ public class PaiementController {
     })
     @PostMapping
     public ResponseEntity<PaiementDTO> create(@RequestBody PaiementDTO dto) {
+        dto.setUuid(null);
         Paiement paiement = mapper.toDomain(dto);
         Paiement saved = service.enregistrerPaiement(paiement);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
@@ -54,18 +56,18 @@ public class PaiementController {
         @ApiResponse(responseCode = "200", description = "Paiement trouve"),
         @ApiResponse(responseCode = "404", description = "Paiement non trouve")
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<PaiementDTO> getById(@Parameter(description = "ID du paiement") @PathVariable Long id) {
-        return service.findById(id)
+    @GetMapping("/{uuid}")
+    public ResponseEntity<PaiementDTO> getByUuid(@Parameter(description = "UUID du paiement") @PathVariable UUID uuid) {
+        return service.findByUuid(uuid)
                 .map(p -> ResponseEntity.ok(mapper.toDto(p)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Historique des paiements", description = "Retourne l'historique de tous les paiements d'une inscription")
     @ApiResponse(responseCode = "200", description = "Historique des paiements")
-    @GetMapping("/inscription/{inscriptionId}")
-    public ResponseEntity<List<PaiementDTO>> getByInscriptionId(@Parameter(description = "ID de l'inscription") @PathVariable Long inscriptionId) {
-        List<PaiementDTO> dtos = service.findByInscriptionId(inscriptionId).stream()
+    @GetMapping("/inscription/{inscriptionUuid}")
+    public ResponseEntity<List<PaiementDTO>> getByInscriptionUuid(@Parameter(description = "UUID de l'inscription") @PathVariable UUID inscriptionUuid) {
+        List<PaiementDTO> dtos = service.findByInscriptionUuid(inscriptionUuid).stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
@@ -73,9 +75,9 @@ public class PaiementController {
 
     @Operation(summary = "Visualiser l'échéancier", description = "Retourne l'échéancier d'un élève (soldes par tranche)")
     @ApiResponse(responseCode = "200", description = "Echeancier de l'inscription")
-    @GetMapping("/inscription/{inscriptionId}/echeancier")
-    public ResponseEntity<List<PaiementDTO>> getEcheancier(@Parameter(description = "ID de l'inscription") @PathVariable Long inscriptionId) {
-        List<PaiementDTO> dtos = service.findByInscriptionId(inscriptionId).stream()
+    @GetMapping("/inscription/{inscriptionUuid}/echeancier")
+    public ResponseEntity<List<PaiementDTO>> getEcheancier(@Parameter(description = "UUID de l'inscription") @PathVariable UUID inscriptionUuid) {
+        List<PaiementDTO> dtos = service.findByInscriptionUuid(inscriptionUuid).stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
@@ -83,29 +85,29 @@ public class PaiementController {
 
     @Operation(summary = "Calculer solde restant", description = "Retourne le solde restant dû pour une inscription")
     @ApiResponse(responseCode = "200", description = "Solde restant calcule")
-    @GetMapping("/inscription/{inscriptionId}/solde-restant")
+    @GetMapping("/inscription/{inscriptionUuid}/solde-restant")
     public ResponseEntity<BigDecimal> getSoldeRestant(
-            @Parameter(description = "ID de l'inscription") @PathVariable Long inscriptionId,
+            @Parameter(description = "UUID de l'inscription") @PathVariable UUID inscriptionUuid,
             @Parameter(description = "Montant total attendu") @RequestParam BigDecimal montantTotal) {
-        BigDecimal solde = service.calculerSoldeRestant(inscriptionId, montantTotal);
+        BigDecimal solde = service.calculerSoldeRestantByUuid(inscriptionUuid, montantTotal);
         return ResponseEntity.ok(solde);
     }
 
     @Operation(summary = "Verifier si a jour", description = "Verifie si une inscription est a jour dans ses paiements")
     @ApiResponse(responseCode = "200", description = "true si a jour, false sinon")
-    @GetMapping("/inscription/{inscriptionId}/a-jour")
+    @GetMapping("/inscription/{inscriptionUuid}/a-jour")
     public ResponseEntity<Boolean> estAJour(
-            @Parameter(description = "ID de l'inscription") @PathVariable Long inscriptionId,
+            @Parameter(description = "UUID de l'inscription") @PathVariable UUID inscriptionUuid,
             @Parameter(description = "Montant total attendu") @RequestParam BigDecimal montantTotal) {
-        boolean aJour = service.estAJour(inscriptionId, montantTotal);
+        boolean aJour = service.estAJourByUuid(inscriptionUuid, montantTotal);
         return ResponseEntity.ok(aJour);
     }
 
-    @Operation(summary = "Impayés par classe", description = "Retourne la liste des impayés pour une classe/niveau spécifique")
+    @Operation(summary = "Impayés d'une inscription", description = "Retourne la liste des paiements en retard pour une inscription")
     @ApiResponse(responseCode = "200", description = "Liste des impayés recuperee")
-    @GetMapping("/classe/{niveauId}/impayes")
-    public ResponseEntity<List<PaiementDTO>> getImpayes(@Parameter(description = "ID du niveau") @PathVariable Long niveauId) {
-        List<PaiementDTO> dtos = service.obtenirPaiementsEnRetard(niveauId).stream()
+    @GetMapping("/inscription/{inscriptionUuid}/impayes")
+    public ResponseEntity<List<PaiementDTO>> getImpayes(@Parameter(description = "UUID de l'inscription") @PathVariable UUID inscriptionUuid) {
+        List<PaiementDTO> dtos = service.obtenirPaiementsEnRetardByUuid(inscriptionUuid).stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
@@ -133,42 +135,21 @@ public class PaiementController {
         return ResponseEntity.ok(dtos);
     }
 
-    @Operation(summary = "Générer reçu PDF", description = "Génère un reçu de paiement (PDF) à remettre au parent")
-    @ApiResponse(responseCode = "200", description = "Reçu généré avec succès")
-    @PostMapping("/{id}/generer-recu")
-    public ResponseEntity<RecuDTO> genererRecu(@Parameter(description = "ID du paiement") @PathVariable Long id) {
-        // Générer le reçu via le service de paiement
-        RecuDTO recu = new RecuDTO();
-        return ResponseEntity.ok(recu);
-    }
-
-    @Operation(summary = "Télécharger reçu", description = "Télécharge un reçu PDF (ou permet de télécharger un reçu signé)")
-    @ApiResponse(responseCode = "200", description = "Reçu téléchargé avec succès")
-    @PostMapping("/{id}/telecharger-recu")
-    public ResponseEntity<byte[]> telechargerRecu(@Parameter(description = "ID du paiement") @PathVariable Long id) {
-        // Télécharger le reçu PDF
-        byte[] fichier = new byte[0];
-        return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=recu-" + id + ".pdf")
-                .body(fichier);
-    }
 
     @Operation(summary = "Modifier un paiement", description = "Modifie les détails d'un paiement")
     @ApiResponse(responseCode = "200", description = "Paiement modifie avec succes")
-    @PutMapping("/{id}")
-    public ResponseEntity<PaiementDTO> update(@PathVariable Long id, @RequestBody PaiementDTO dto) {
+    @PutMapping("/{uuid}")
+    public ResponseEntity<PaiementDTO> update(@PathVariable UUID uuid, @RequestBody PaiementDTO dto) {
         Paiement paiement = mapper.toDomain(dto);
-        Paiement updated = service.update(paiement);
+        Paiement updated = service.update(uuid, paiement);
         return ResponseEntity.ok(mapper.toDto(updated));
     }
 
     @Operation(summary = "Supprimer un paiement", description = "Supprime un paiement")
     @ApiResponse(responseCode = "204", description = "Paiement supprime avec succes")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> delete(@PathVariable UUID uuid) {
+        service.deleteByUuid(uuid);
         return ResponseEntity.noContent().build();
     }
 }
-
-

@@ -21,25 +21,22 @@ public class PaiementEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long inscriptionId;
+    @Column(unique = true, nullable = false)
+    private UUID uuid;
 
-    @Enumerated(EnumType.STRING)
+    private UUID inscriptionUuid;
     private TypePaiement typePaiement;
 
-    private Long referenceId;
+    private UUID referenceUuid;
     private BigDecimal montant;
     private LocalDateTime datePaiement;
 
     @Enumerated(EnumType.STRING)
     private ModePaiement modePaiement;
 
-    private String recuPath;
-
     @Column(columnDefinition = "text")
     private String commentaire;
 
-    private UUID utilisateurId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
-

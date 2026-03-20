@@ -5,13 +5,15 @@ import com.sophia.backend.domain.model.TranchePaiement;
 import com.sophia.backend.infrastructure.persistence.entity.TranchePaiementEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class TranchePaiementMapper {
     public TranchePaiementDTO toDto(TranchePaiement t) {
         if (t == null) return null;
         TranchePaiementDTO dto = new TranchePaiementDTO();
-        dto.setId(t.getId());
-        dto.setFraisScolaireId(t.getFraisScolaireId());
+        dto.setUuid(t.getUuid());
+        dto.setFraisScolaireUuid(t.getFraisScolaireUuid());
         dto.setNomTranche(t.getNomTranche());
         dto.setMontant(t.getMontant());
         dto.setDateLimiteDebut(t.getDateLimiteDebut());
@@ -25,14 +27,15 @@ public class TranchePaiementMapper {
     public TranchePaiement toDomain(TranchePaiementDTO d) {
         if (d == null) return null;
         TranchePaiement t = new TranchePaiement();
-        t.setId(d.getId());
-        t.setFraisScolaireId(d.getFraisScolaireId());
+        t.setUuid(d.getUuid());
+        t.setFraisScolaireUuid(d.getFraisScolaireUuid());
         t.setNomTranche(d.getNomTranche());
         t.setMontant(d.getMontant());
         t.setDateLimiteDebut(d.getDateLimiteDebut());
         t.setDateLimiteFin(d.getDateLimiteFin());
         t.setOrdre(d.getOrdre());
-        // Ne pas mapper createdAt, updatedAt (READ_ONLY)
+        t.setCreatedAt(d.getCreatedAt());
+        t.setUpdatedAt(d.getUpdatedAt());
         return t;
     }
 
@@ -40,7 +43,9 @@ public class TranchePaiementMapper {
         if (e == null) return null;
         TranchePaiement t = new TranchePaiement();
         t.setId(e.getId());
+        t.setUuid(e.getUuid());
         t.setFraisScolaireId(e.getFraisScolaireId());
+        t.setFraisScolaireUuid(e.getFraisScolaireUuid());
         t.setNomTranche(e.getNomTranche());
         t.setMontant(e.getMontant());
         t.setDateLimiteDebut(e.getDateLimiteDebut());
@@ -55,7 +60,9 @@ public class TranchePaiementMapper {
         if (t == null) return null;
         TranchePaiementEntity e = new TranchePaiementEntity();
         e.setId(t.getId());
+        e.setUuid(t.getUuid());
         e.setFraisScolaireId(t.getFraisScolaireId());
+        e.setFraisScolaireUuid(t.getFraisScolaireUuid());
         e.setNomTranche(t.getNomTranche());
         e.setMontant(t.getMontant());
         e.setDateLimiteDebut(t.getDateLimiteDebut());

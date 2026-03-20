@@ -10,7 +10,7 @@ public class CycleMapper {
     public CycleDTO toDto(Cycle c) {
         if (c == null) return null;
         CycleDTO dto = new CycleDTO();
-        dto.setId(c.getId());
+        dto.setUuid(c.getUuid());
         dto.setNom(c.getNom());
         dto.setDescription(c.getDescription());
         dto.setOrdre(c.getOrdre());
@@ -22,7 +22,7 @@ public class CycleMapper {
     public Cycle toDomain(CycleDTO d) {
         if (d == null) return null;
         Cycle c = new Cycle();
-        c.setId(d.getId());
+        c.setUuid(d.getUuid());
         c.setNom(d.getNom());
         c.setDescription(d.getDescription());
         c.setOrdre(d.getOrdre());
@@ -34,6 +34,7 @@ public class CycleMapper {
         if (e == null) return null;
         Cycle c = new Cycle();
         c.setId(e.getId());
+        c.setUuid(e.getUuid());
         c.setNom(e.getNom());
         c.setDescription(e.getDescription());
         c.setOrdre(e.getOrdre());
@@ -46,6 +47,7 @@ public class CycleMapper {
         if (c == null) return null;
         CycleEntity e = new CycleEntity();
         e.setId(c.getId());
+        e.setUuid(c.getUuid());
         e.setNom(c.getNom());
         e.setDescription(c.getDescription());
         e.setOrdre(c.getOrdre());

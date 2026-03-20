@@ -20,9 +20,12 @@ public class InscriptionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private UUID eleveId;
-    private Long niveauId;
-    private Long anneeScolaireId;
+    @Column(unique = true, nullable = false)
+    private UUID uuid;
+
+    private UUID eleveUuid;
+    private UUID niveauUuid;
+    private UUID anneeScolaireUuid;
     private LocalDate dateInscription;
 
     @Enumerated(EnumType.STRING)
@@ -30,7 +33,12 @@ public class InscriptionEntity {
 
     @Column(columnDefinition = "text")
     private String commentaire;
+
+    // Gestion des blocages
+    private boolean bloqueExamen;
+    private boolean bloqueEvaluation;
+    private String raisonBlocage;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
-
